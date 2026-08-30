@@ -275,6 +275,37 @@ One data source, **two renderers**: the web CV page and an A4 print template.
 They share data, not presentation — an A4 Lebenslauf and a web page want
 honestly different layouts.
 
+They do share three *rules*, which the A4 template worked out first and
+`app/pages/cv.vue` now follows, because the page had the same three problems:
+
+1. **One gutter.** Every section puts its label — a date range, a skill group,
+   a language — in a fixed left column, so the document has a single vertical
+   line the eye follows and every value starts at the same x. The page's header
+   is in it too: location, email, links and the PDF buttons are gutter rows, not
+   a free stack, which is what stopped the top of the page reading as four
+   separate things that happened to land near each other.
+2. **Four type steps, far apart.** Six steps, two of them a hair apart, read as
+   noise rather than as hierarchy.
+3. **Mono is a machine fact** (dates, section headings, tech stacks); **sans is
+   prose**, entry titles included. A mono entry title one size off a mono
+   heading makes the two look like the same kind of thing.
+
+The page's tail — languages, certificates, interests — is the PDF's sidebar
+folded into one band, not four more full-width sections: they are short
+reference lists, so they neither earn the gutter nor a band each.
+
+The **skill meter** is shared as well, same ten-cell construction and same
+reason for not using `█`/`░`. Two things the page has that the sheet has no
+room for: a **timeline rail** down the gutter's column boundary on the dated
+sections only — skills uses the same gutter but is not a chronology — and an
+amber tick on each section rule, which is `.prompt-bar` sitting on the rule
+instead of floating above the heading.
+
+**Nothing on the page is smaller than 13px.** The gutter and the `stack:` lines
+were 12 and were legible in the sense that the letters resolved, not in the
+sense that anyone read them. The gutter is 10rem because that is what the
+widest range needs at 13px without wrapping.
+
 ```bash
 npm run cv -- --lang=de --private   # full German Lebenslauf → cv-out/ (gitignored)
 npm run cv -- --lang=en --private   # full English CV        → cv-out/ (gitignored)
