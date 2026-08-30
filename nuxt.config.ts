@@ -12,7 +12,7 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'theme-color', content: '#0e1116' },
+        { name: 'theme-color', content: '#171c24' },
         // Mirror of site.description; used before a page sets its own.
         { name: 'description', content: 'Full-stack developer in Heidelberg — Java, Spring, Vue and TypeScript.' },
       ],

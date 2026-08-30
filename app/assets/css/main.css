@@ -28,17 +28,31 @@
   --accent-contrast: #ffffff;
 }
 
+/* Dark = near-black, but not a void. The ground used to be #0e1116, which on a
+   page that is mostly text on the ground — the CV, a project entry — reads as a
+   hole rather than as a screen. The hero got away with it because its content
+   sits on --surface, a step up; nothing else on the site has that.
+
+   So the whole ramp lifts together, keeping every step's relationship intact:
+   surface stays ~1.10x the ground, so the terminal window reads exactly as it
+   did against the page. --muted moves furthest (6.15:1 → 6.8:1) because it
+   carries most of a content page — dates, orgs, notes — and it was the weakest
+   thing on the darkest ground. --border lifts with it, which is what finally
+   makes a hairline rule a rule rather than a rumour.
+
+   Body text stays above 11:1 either way; this trades a little contrast for a
+   ground that is not a black hole, which is the comfortable direction. */
 .dark {
-  --bg: #0e1116;
-  --surface: #161b22;
-  --surface-2: #1c2128;
-  --text: #c9d1d9;
-  --muted: #8b949e;
-  --border: #30363d;
+  --bg: #171c24;
+  --surface: #1e242e;
+  --surface-2: #262d38;
+  --text: #d0d8e2;
+  --muted: #9aa5b1;
+  --border: #3d4551;
   --accent: #e3b341;
   --accent-2: #3fb950;
   --accent-hover: #f0c661;
-  --accent-contrast: #0e1116;
+  --accent-contrast: #171c24;
 }
 
 @theme inline {
@@ -257,7 +271,9 @@ body,
   font-family: var(--font-mono);
 }
 /* Code blocks keep the dark terminal ground in both themes — a code block is a
-   terminal, and this site has opinions about that. */
+   terminal, and this site has opinions about that. It is the site's old ground
+   colour, and deliberately left there: against the lifted --bg it now reads as
+   an inset panel instead of dissolving into the page. */
 .prose pre {
   background: #0e1116;
   color: #c9d1d9;

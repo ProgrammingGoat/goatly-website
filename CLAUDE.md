@@ -137,6 +137,18 @@ this script** without a concrete failure it would have caught.
   Tokens live in `app/assets/css/main.css`; use them via `bg-surface`,
   `text-accent`, etc. Both themes define every token — never add a colour that
   exists in only one.
+
+  The dark ground is *near*-black and no longer nearly-black: it was `#0e1116`,
+  which the hero survived because its content sits on `--surface`, a step up,
+  and which every other page read as a hole because nothing else has that step.
+  The whole ramp was lifted together so each step keeps its relationship —
+  `--surface` stays ~1.10x the ground, and `--muted` moved furthest because it
+  carries most of a content page. If it ever moves again, move it as a ramp;
+  lifting `--bg` alone would flatten the terminal window against the page.
+
+  `.prose pre` keeps the old `#0e1116` on purpose — a code block is a terminal,
+  and against the lifted ground it now reads as an inset rather than dissolving
+  into the page.
 - **Dark-first.** A warm paper-terminal light theme is available via the toggle;
   it is not stark white, so long reads don't glare.
 - **Type**: JetBrains Mono for headings, nav, eyebrows and all terminal chrome;
