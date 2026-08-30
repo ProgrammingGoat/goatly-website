@@ -40,8 +40,8 @@ export type CvData = {
   interests?: L[]
   /** Only present on a --private build. */
   private?: {
-    street?: string
-    postcode?: string
+    /** Postal address lines, from app/legal.ts — public, but PDF-only here. */
+    address?: string[]
     phone?: string
     email?: string
   }
@@ -184,10 +184,12 @@ export function renderCv(cv: CvData, lang: Lang): string {
   const ui = UI[lang]
   const p = cv.private
 
-  // The address line: city and country are public and always shown; the street
-  // and postcode only exist on a --private build.
-  const addressLines = p?.street
-    ? [esc(p.street), esc([p.postcode, t(cv.location, lang)].filter(Boolean).join(' '))]
+  // A --private build prints the full postal address; the public one prints
+  // city and country only. The address is public — it is in the Impressum —
+  // but a CV gets forwarded around in a way a legal page does not, so the
+  // public PDF still leaves it off.
+  const addressLines = p?.address?.length
+    ? [...p.address.map(esc), esc(t(cv.location, lang))]
     : [esc(t(cv.location, lang))]
 
   // The address is one row however many lines it runs to, so the pin sits

@@ -11,8 +11,10 @@ import { buildSitemap, type SitemapUrl } from '../utils/sitemap'
  */
 
 // Pages that aren't content entries. Hand-maintained: nothing enumerates the
-// routes here, so a new top-level page needs adding to this list. /admin/ is
-// deliberately absent — it's the CMS, and robots.txt disallows it.
+// routes here, so a new top-level page needs adding to this list.
+// Legal pages are deliberately absent: robots.txt disallows them and they carry
+// a noindex tag, so listing them in the sitemap would ask a crawler to index
+// exactly what the other two say not to.
 const STATIC = ['/', '/about', '/projects', '/cv']
 
 const COLLECTIONS = ['projects'] as const

@@ -28,6 +28,7 @@ import { existsSync, mkdirSync, readFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { chromium } from 'playwright-core'
 import { parse } from 'yaml'
+import { legal } from '../app/legal.ts'
 import { renderCv, type CvData, type Lang } from './cv-template.ts'
 
 const PUBLIC_CV = 'content/cv/cv.yml'
@@ -111,7 +112,13 @@ function loadData(usePrivate: boolean): CvData {
     )
   }
   const priv = parse(readFileSync(PRIVATE_CV, 'utf8')) ?? {}
-  return { ...cv, private: priv.contact ?? {} }
+  // The postal address comes from app/legal.ts, not the private file: it is
+  // published in the Impressum, so app/legal.ts is its one source. Phone and
+  // personal email are still private and still come from cv.private.yml.
+  return {
+    ...cv,
+    private: { ...(priv.contact ?? {}), address: legal.address ?? undefined },
+  }
 }
 
 async function main() {

@@ -1,5 +1,19 @@
 User-Agent: *
-Disallow: /admin/
+
+# The legal pages carry a postal address, which is required there by § 5 DDG
+# and wanted nowhere else. Disallowing them keeps polite crawlers from ever
+# fetching the address, so it does not reach a search index.
+#
+# Note this fights the `noindex` meta tag those pages also carry: a crawler
+# that obeys this file never fetches the page, so it never sees the noindex,
+# and a linked URL can still be listed bare (no title, no snippet). That is the
+# accepted trade — a bare URL in results is much better than an indexed
+# address. If a bare listing ever needs removing, this Disallow has to come off
+# first so the crawler can read the noindex.
+#
+# Neither mechanism stops a scraper that ignores both. The address is public.
+Disallow: /impressum
+Disallow: /datenschutz
 
 # Absolute by spec — and hardcoded, so it needs changing by hand if the
 # canonical origin in nuxt.config ever does.

@@ -21,16 +21,29 @@
  * but email alone is thin — if an Impressum turns out to be required, consider
  * adding a contact form.
  *
- * Set `address` to a real value before pointing the domain at the site. Until
- * then the pages render an explicit notice rather than a plausible-looking
- * blank, so an unfinished Impressum cannot go live quietly.
+ * DECIDED: option 3 — the home address is published. The `address` field below
+ * is filled in, so the Impressum is complete and the incomplete-notice branch
+ * in the page no longer fires. It stays in the markup for the next time this
+ * file is scaffolded somewhere.
  */
 export const legal = {
   name: 'Lukas Brackmann',
   email: 'contact@goatly.dev',
 
-  /** TODO(legal): ladungsfähige Anschrift, or null while undecided. */
-  address: null as string[] | null,
+  /**
+   * Ladungsfähige Anschrift, as § 5 DDG requires.
+   *
+   * THIS IS PUBLIC AND PERMANENT. It renders into impressum.html and
+   * datenschutz.html, which are static files that crawlers archive; robots.txt
+   * and a noindex tag reduce how widely it spreads but cannot unpublish it.
+   * That was a deliberate decision — see the note above.
+   *
+   * It lives here rather than in cv.private.yml precisely because it is no
+   * longer private: guarding a value that the site itself publishes would make
+   * privacy:check fire on this file and teach everyone to ignore it. The CV
+   * PDF reads the address from here too, so there is still one source.
+   */
+  address: ['Im Fasanenwäldchen 4', '69126 Heidelberg'] as string[] | null,
 
   /** Last review of the Datenschutzerklärung. */
   updated: '2026-08-30',
