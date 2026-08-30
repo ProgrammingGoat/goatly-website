@@ -145,10 +145,20 @@ this script** without a concrete failure it would have caught.
   (`.prompt-heading`), a blinking block cursor (`.prompt-cursor`), a rule
   (`.prompt-bar`), a status-line footer. Used *sparingly* — everything else
   stays quiet.
-- **Goat sub-theme, kept light**: the domain and handle carry it; an emoji in
-  one or two places. Not on every heading, and *not* in the favicon — a goat
-  mark was tried and dropped, because the full Noto Emoji goat turns to mush at
-  16px and the site is a developer's, not a farm's.
+- **Goat sub-theme**: a Noto Emoji goat sits in the hero terminal's top-right
+  (`.goat-mark`), and the domain and handle carry the rest. Not on every
+  heading, and *not* in the favicon — the same artwork turns to mush at 16px,
+  which is where a favicon spends its life; at 150px it has room to read.
+
+  Opacity is 0.5 dark / 0.6 light — **higher on paper, not lower**. The coat is
+  pale, so on white it starts closer to the background and needs more to read
+  as much as the same mark does against near-black. Getting that backwards is
+  what made the first attempt nearly invisible in light mode.
+
+  It is positioned on `.crt`, not inside `.crt-body`: the body scrolls the
+  shell's scrollback, and a watermark that scrolls with the text is a texture,
+  not a watermark. Hidden below `lg`, where the terminal is too narrow to have
+  a spare corner.
 - **The favicon** is the Tabler `terminal` prompt glyph in amber on a rounded
   plate (`public/favicon.svg`, MIT, `licenses/tabler-icons/LICENSE`). The plate
   *is* the window frame, which is why the boxed `terminal-2` variant was
@@ -219,9 +229,30 @@ Schema in `content.config.ts`.
 
 Frontmatter lists are **block style** — `tags:` then indented `- item`.
 
-Cover images go in `/public` (e.g. `public/img/projects/thing.png`) with
-`cover: /img/projects/thing.png` in frontmatter. Without one, a per-title
-gradient placeholder is shown.
+Starting points live in **`/templates`**, outside `/content` so they are never
+published and survive `/content` being emptied. Copy one in to add an entry:
+
+```bash
+cp templates/project.md content/projects/my-thing.md
+```
+
+Adding a field to `content.config.ts` means updating the template too — nothing
+generates one from the other.
+
+### Cover images
+
+1. Put the file in `public/img/projects/`.
+2. Reference it from `/public`'s root: `cover: /img/projects/my-thing.png`.
+
+**Commit the image with the entry.** `failOnError` is on, so a `cover:` pointing
+at a missing file fails the build rather than shipping a broken image.
+
+Landscape suits the card's 16/9 slot. At least 1200px wide — the social card
+crops 1200×630 out of it, and cards request up to 640px at 2x — with 1600–2000
+a sensible target; beyond that only costs build time, since every variant is
+encoded to AVIF and WebP. `focus:` moves the part of an off-ratio cover that
+survives the crop. Without a cover the card shows a gradient carrying the
+entry's path.
 
 ### Bilingual CV fields
 
