@@ -111,9 +111,13 @@ export default defineNuxtConfig({
 
   // Self-hosted webfonts (downloaded at build time — no external requests).
   fonts: {
+    // IBM Plex, not the JetBrains Mono + Inter pairing every developer
+    // portfolio reaches for. Plex is the typographic world of enterprise Java
+    // and Spring, which is the work this site is advertising, and the mono and
+    // sans are one superfamily so they sit together without negotiation.
     families: [
-      { name: 'JetBrains Mono', provider: 'google', weights: [400, 500, 600, 700] },
-      { name: 'Inter', provider: 'google', weights: [400, 500, 600, 700] },
+      { name: 'IBM Plex Mono', provider: 'google', weights: [400, 500, 600, 700] },
+      { name: 'IBM Plex Sans', provider: 'google', weights: [400, 500, 600, 700] },
     ],
   },
 

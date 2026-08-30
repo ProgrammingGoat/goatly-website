@@ -160,6 +160,20 @@ this script** without a concrete failure it would have caught.
 - Don't animate placeholder elements (the gradient standing in for a missing
   cover image). A placeholder that draws the eye is doing the wrong job.
 
+- **The hero prompt is a real shell** (`TerminalShell.vue`) — the site's one
+  easter egg, and deliberately native to the design rather than pasted onto it.
+  It is inert until clicked or tabbed into, so a recruiter sees the same static
+  prompt as before. It can only navigate, print and toggle the theme.
+
+  A cursor-following goat was tried here first and removed: a full-colour emoji
+  trailing the pointer reads as a sticker stuck onto a page that is otherwise
+  disciplined mono on near-black. If whimsy gets added again, it has to be in
+  the site's own material — type, prompt, terminal — not on top of it.
+
+- **No text-shadow on the type.** A phosphor bloom on every accent glyph was
+  tried and muddied the letterforms; the ambient backlight behind the glass
+  (`.crt-glow`) carries the effect on its own.
+
 #### Accessibility is part of the theme, not a later pass
 
 - The hero terminal is decorative chrome around **real** `<h1>`/`<p>` content.
@@ -171,6 +185,11 @@ this script** without a concrete failure it would have caught.
   `prefers-reduced-motion: reduce`.
 - The terminal must not force horizontal page scroll at 360px — it scrolls
   inside its own box or reflows.
+- The shell's output is an `aria-live="polite"` region and its input carries a
+  real label. That is not decoration like the rest of the terminal chrome — it
+  is interactive content, so it has to be usable by a screen reader rather than
+  hidden from one.
+
 
 ### 5. Git commits
 

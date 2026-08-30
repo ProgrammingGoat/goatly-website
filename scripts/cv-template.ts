@@ -122,7 +122,7 @@ const UI = {
  * A skill level as a ten-cell meter.
  *
  * Drawn with elements rather than the block characters `█`/`░` this started
- * as: JetBrains Mono ships no U+2588, so the fallback face supplied them at a
+ * as: The webfont ships no U+2588, so the fallback face supplied them at a
  * different advance width and the cells came out gapped and ragged. Ten
  * discrete cells keep the segmented, terminal look without depending on a
  * glyph that may not exist in whichever font actually loads.
@@ -246,7 +246,7 @@ export function renderCv(cv: CvData, lang: Lang): string {
      (offline), the stack falls back to a system mono and the layout holds. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   /* Light palette from app/assets/css/main.css. The page itself stays white:
      the warm paper tone is used only for the sidebar and the title bar, so a
@@ -259,8 +259,8 @@ export function renderCv(cv: CvData, lang: Lang): string {
     --border: #ddd5c4;
     --accent: #8a5f0a;
     --accent-2: #1a7f37;
-    --mono: "JetBrains Mono", ui-monospace, "DejaVu Sans Mono", monospace;
-    --sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "DejaVu Sans Mono", monospace;
+    --sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
   }
 
   @page { size: A4; margin: 0; }

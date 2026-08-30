@@ -48,12 +48,19 @@ const focusStyle = computed(() => {
         style: focusStyle,
       }"
     />
-    <!-- Placeholder gradient when no cover is set yet. -->
+    <!-- No cover yet. A bare gradient reads as a broken image, so the slot
+         says what it is instead: the entry's own path, set like a shell would
+         print it. Decorative — the card's heading already carries the title,
+         and repeating it here would make a screen reader say it twice. -->
     <div
       v-else
-      class="h-full w-full transition duration-300 group-hover:scale-[1.04]"
+      class="flex h-full w-full items-center justify-center transition duration-300 group-hover:scale-[1.04]"
       :style="{ background: grad }"
       aria-hidden="true"
-    />
+    >
+      <span class="max-w-full truncate px-4 font-mono text-sm text-white/45">
+        <span class="text-white/30">~</span>{{ seed || '' }}
+      </span>
+    </div>
   </div>
 </template>
