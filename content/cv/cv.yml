@@ -1,0 +1,188 @@
+# PUBLIC CV DATA. Anything in this file is published on goatly.dev and in the
+# build output, permanently. Street address, phone, date of birth, photo and
+# the personal email belong in cv.private.yml at the repo root, which Nuxt
+# never reads. See CLAUDE.md, "Privacy".
+name: Lukas Brackmann
+
+headline:
+  en: Full-Stack Developer
+  de: Full-Stack-Entwickler
+
+tagline:
+  en: Full-stack development · Test automation · AI-assisted development
+  de: Full-Stack-Entwicklung · Testautomatisierung · KI-gestützte Entwicklung
+
+# City and country only. Never a street.
+location:
+  en: Heidelberg, Germany
+  de: Heidelberg, Deutschland
+
+email: hello@goatly.dev
+
+links:
+  - label: goatly.dev
+    url: https://goatly.dev
+  - label: GitHub
+    url: https://github.com/ProgrammingGoat
+
+experience:
+  - start: 2026-05
+    end: 2026-09
+    role:
+      en: Junior Developer
+      de: Junior Developer
+    org: tts Knowledge Products GmbH
+    bullets:
+      - en: Built and shipped new features and bug fixes, largely independently, using Claude Code.
+        de: Entwicklung und Umsetzung neuer Features, Bugfixing, größtenteils eigenständig mithilfe von Claude Code.
+      - en: Dependency updates and closing security vulnerabilities; contributed to internal tooling, including a local Docker setup.
+        de: Dependency-Updates und Schließen von Sicherheitslücken; Mitarbeit an internem Tooling (u. a. lokales Docker-Setup).
+    stack: [Java, Spring, Tomcat, Docker, TypeScript, Vue]
+
+  - start: 2025-05
+    end: 2026-04
+    role:
+      en: Junior Agile Software Tester
+      de: Junior Agile Software Tester
+    org: tts Knowledge Products GmbH
+    bullets:
+      - en: Planned, wrote and ran manual and automated software tests, and supported release sign-off.
+        de: Planung, Erstellung und Durchführung manueller und automatisierter Softwaretests, Unterstützung bei Release-Abnahmen.
+      - en: Analysed and documented defects, working closely with development, product owners and business stakeholders.
+        de: Fehleranalyse und -dokumentation, enge Zusammenarbeit mit Entwicklung, Product Owner:innen und Fachbereichen.
+      - en: Designed automated test scripts and contributed to improving the test process.
+        de: Konzeption automatisierter Testskripte, Mitarbeit an Testprozess-Verbesserung.
+    stack: [JIRA / AIO Tests, Playwright]
+
+  - start: 2024-10
+    end: 2025-01
+    role:
+      en: Junior Consultant
+      de: Junior Consultant
+    org: Avvale GmbH
+    location: Mannheim
+    bullets:
+      - en: Full-stack development (SAP Commerce, Composable Storefront) and technical support.
+        de: Full Stack Development (SAP Commerce, Composable Storefront), technischer Support.
+    stack: [Java, Spring, Angular, TypeScript, MS SQL, Docker]
+
+education:
+  - start: 2021-09
+    end: 2024-09
+    title:
+      en: Vocational training as IT Specialist for Application Development
+      de: Ausbildung zum Fachinformatiker für Anwendungsentwicklung
+    org: Berufsbildungswerk Neckargemünd GmbH
+    grade: 97/100
+    note:
+      en: "Coursework: Java, HTML, CSS, PHP, MySQL · Practical: C#, Python · Final project: a coffee-brewing helper tool in Python (100/100)."
+      de: "Berufsschule: Java, HTML, CSS, PHP, MySQL · Praxis: C#, Python · Abschlussprojekt: Kaffeezubereitungs-Helfertool in Python (100 Punkte)."
+
+  # Only the years are known here, and inventing months would be worse than
+  # saying less — the schema allows a bare year for exactly this case.
+  - start: '2013'
+    end: '2021'
+    title:
+      en: Various degree courses and a period of reorientation
+      de: Verschiedene Studiengänge und Orientierungsphase
+    note:
+      en: Applied Computer Science, Computational Linguistics/Philosophy (Heidelberg University), Graphic Design (Diploma HS Mannheim), BVB (BTZ Wiesloch) — before vocational training turned out to be the right format.
+      de: Angewandte Informatik, Computerlinguistik/Philosophie (Uni Heidelberg), Grafikdesign (Diploma HS Mannheim), BVB (BTZ Wiesloch) — bevor die Ausbildung als passendes Format identifiziert wurde.
+
+  - start: 2005-09
+    end: 2013-06
+    title:
+      en: Abitur
+      de: Abitur
+    org: Kurpfalz-Gymnasium Schriesheim
+    grade: '2,6'
+
+internships:
+  - start: 2023-04
+    end: 2023-10
+    title:
+      en: Internship, Full-Stack Development
+      de: Praktikum Full-Stack-Development
+    org: SAP SE Walldorf
+    note:
+      en: Angular, TypeScript, NestJS
+      de: Angular, TypeScript, NestJS
+
+  - start: 2020-10
+    end: 2020-11
+    title:
+      en: Internship, Application Development
+      de: Praktikum Anwendungsentwicklung
+    org: Engelmann Sensor GmbH Wiesloch
+    note:
+      en: C#, Windows Forms
+      de: C#, Windows Forms
+
+  - start: 2020-08
+    end: 2020-09
+    title:
+      en: Internship, Systems Integration
+      de: Praktikum Systemintegration
+    org: AZ IT Service GmbH Nußloch
+
+  - start: 2018-09
+    end: 2019-08
+    title:
+      en: Voluntary Ecological Year
+      de: Freiwilliges Ökologisches Jahr
+    org: Zoo Heidelberg
+    note:
+      en: Marketing and administration — events, signage, animal sponsorships.
+      de: Marketing & Verwaltung — Veranstaltungen, Beschilderung, Tierpatenschaften.
+
+skills:
+  - group:
+      en: Languages
+      de: Programmiersprachen
+    items: [Python, JavaScript/TypeScript, Java, 'C#']
+  - group:
+      en: Web
+      de: Web Development
+    items: [Vue, Angular, HTML/CSS, PHP]
+  - group:
+      en: Frameworks & tools
+      de: Frameworks / Tools
+    items: [Spring, Docker, Playwright, Git, JIRA, 'AI-assisted development (Claude Code)']
+  - group:
+      en: Databases
+      de: Datenbanken
+    items: [MySQL, MS SQL]
+
+languages:
+  - name:
+      en: German
+      de: Deutsch
+    level:
+      en: Native
+      de: Muttersprache
+  - name:
+      en: English
+      de: Englisch
+    level:
+      en: B2
+      de: B2
+
+certificates:
+  - name:
+      en: KMK Foreign Language Certificate (English B2, 100%)
+      de: KMK-Fremdsprachen-Zertifikat (Englisch B2, 100%)
+    date: 2023-08
+  - name:
+      en: European Certificate for Digital Literacy (ECDL)
+      de: European Certificate for Digital Literacy (ECDL)
+    date: 2022-09
+
+interests:
+  - en: 3D printing
+    de: 3D-Drucken
+  - en: Drawing
+    de: Zeichnen
+  - en: Arch Linux
+    de: Arch Linux
+  - en: Python scripting
+    de: Python Scripting

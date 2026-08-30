@@ -1,0 +1,43 @@
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Tool scratch — Playwright MCP dumps snapshots and console logs into the cwd
+.playwright-mcp
+
+# Misc
+.DS_Store
+.fleet
+.idea
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# ---------------------------------------------------------------------------
+# Private CV data — NEVER commit. See CLAUDE.md, "Privacy".
+#
+# The site is statically generated and this repo is public, so anything tracked
+# here is published permanently. Street address, phone, date of birth and the
+# personal email live only in cv.private.yml, which Nuxt never reads — only
+# scripts/build-cv.mjs does.
+#
+# `npm run privacy:check` fails if any value from that file reaches the build
+# output, the working tree or git history. test/privacy.test.ts asserts these
+# very rules still exist, so they cannot be dropped silently.
+# ---------------------------------------------------------------------------
+cv.private.yml
+*.private.*
+cv-out/

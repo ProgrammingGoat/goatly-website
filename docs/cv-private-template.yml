@@ -1,0 +1,36 @@
+# Template for cv.private.yml — copy it to the repo root and fill it in:
+#
+#   cp docs/cv-private-template.yml cv.private.yml
+#
+# cv.private.yml is gitignored and Nuxt never reads it. Only
+# scripts/build-cv.ts opens it, and only when passed --private, to print the
+# full application PDF. Everything publishable lives in content/cv/cv.yml.
+#
+# `npm run privacy:check` searches every value in your filled-in copy against
+# the tracked files and the build output, so anything you put here is also
+# something the guard will protect. Values shorter than 6 characters are
+# skipped — they would match any document.
+#
+# This template contains no real data, which is why it is safe to commit.
+
+# ONLY genuinely-private values belong here. City and country are deliberately
+# public — they live in content/cv/cv.yml as `location` — and listing them here
+# would make the guard fire on every page that correctly names your city. The
+# PDF composes the full address from the public city plus the street below.
+contact:
+  street: Musterweg 1
+  postcode: '00000'
+  phone: '0000 0000000'
+  email: your.personal@example.com
+
+birth:
+  date: '1900-01-01'
+
+# Path to the CV portrait, relative to the repo root. Keep the file itself out
+# of /public — anything there is published.
+photo: ../private/photo.jpg
+
+# Handles on accounts that must never be linked from this professional site.
+# Nothing reads this key; it exists so privacy:check will catch one appearing
+# in a tracked file or in the build output.
+aliases: []

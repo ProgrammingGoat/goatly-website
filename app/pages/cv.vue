@@ -1,0 +1,175 @@
+<script setup lang="ts">
+import { site } from '~/site'
+
+// The site is English, so the page reads the `en` side of every localised
+// field. The `de` side exists for the PDF — see scripts/build-cv.ts.
+const { data: cv } = await useAsyncData('cv', () => queryCollection('cv').first())
+
+useSeo({
+  title: 'CV',
+  description: site.cv.description,
+})
+
+// Person schema is worth more here than anywhere else on the site: it is what
+// lets a search engine connect the name to the role, employer and skills.
+const schema = computed(() => cv.value && {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  'name': cv.value.name,
+  'jobTitle': cv.value.headline.en,
+  'email': `mailto:${cv.value.email}`,
+  'address': { '@type': 'PostalAddress', 'addressLocality': 'Heidelberg', 'addressCountry': 'DE' },
+  'worksFor': cv.value.experience?.[0] && {
+    '@type': 'Organization',
+    'name': cv.value.experience[0]!.org,
+  },
+  'knowsAbout': (cv.value.skills ?? []).flatMap(s => s.items),
+  'knowsLanguage': (cv.value.languages ?? []).map(l => l.name.en),
+  'url': 'https://goatly.dev/cv',
+})
+
+useHead(() => ({
+  script: schema.value
+    ? [{ type: 'application/ld+json', innerHTML: JSON.stringify(schema.value) }]
+    : [],
+}))
+</script>
+
+<template>
+  <div v-if="cv" class="mx-auto max-w-3xl">
+    <div class="prompt-bar mb-4 w-10" />
+    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{{ cv.name }}</h1>
+    <p class="mt-1 font-display text-lg text-accent">{{ cv.headline.en }}</p>
+    <p class="mt-2 text-sm text-muted">{{ cv.tagline.en }}</p>
+
+    <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-sm text-muted">
+      <span>{{ cv.location.en }}</span>
+      <a :href="`mailto:${cv.email}`" class="text-accent transition hover:text-accent-hover">
+        {{ cv.email }}
+      </a>
+      <a
+        v-for="l in cv.links"
+        :key="l.url"
+        :href="l.url"
+        class="transition hover:text-accent"
+      >{{ l.label }}</a>
+    </div>
+
+    <p class="mt-6 text-sm text-muted">{{ site.cv.lead }}</p>
+    <!-- TODO(asset): generate these with `npm run cv` once scripts/build-cv.ts
+         exists, then drop the `disabled` styling. -->
+    <div class="mt-3 flex flex-wrap gap-3">
+      <span class="cursor-not-allowed rounded-lg border border-border px-4 py-2 font-mono text-sm text-muted opacity-60">
+        CV (English) — PDF pending
+      </span>
+      <span class="cursor-not-allowed rounded-lg border border-border px-4 py-2 font-mono text-sm text-muted opacity-60">
+        Lebenslauf (Deutsch) — PDF pending
+      </span>
+    </div>
+
+    <!-- Experience -->
+    <section class="mt-14">
+      <h2 class="prompt-heading font-display text-xl font-bold">experience</h2>
+      <ol class="mt-6 space-y-8">
+        <li v-for="job in cv.experience" :key="`${job.org}-${job.start}`">
+          <p class="eyebrow text-muted">{{ formatRange(job.start, job.end) }}</p>
+          <h3 class="mt-1 font-display text-lg font-semibold">{{ job.role.en }}</h3>
+          <p class="text-sm text-muted">
+            {{ job.org }}<template v-if="job.location">, {{ job.location }}</template>
+          </p>
+          <ul v-if="job.bullets?.length" class="mt-3 space-y-1.5">
+            <li
+              v-for="(b, i) in job.bullets"
+              :key="i"
+              class="relative pl-5 text-sm leading-relaxed before:absolute before:left-0 before:text-accent before:content-['▸']"
+            >
+              {{ b.en }}
+            </li>
+          </ul>
+          <!-- Plain chips, not TagList: these are what the job used, not a
+               filter over the projects index, and a link that filters to
+               nothing is worse than no link. -->
+          <ul v-if="job.stack?.length" class="mt-3 flex flex-wrap gap-1.5">
+            <li
+              v-for="tech in job.stack"
+              :key="tech"
+              class="rounded-full border border-border bg-surface-2 px-2.5 py-0.5 font-mono text-xs text-muted"
+            >
+              {{ tech }}
+            </li>
+          </ul>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Education -->
+    <section class="mt-14">
+      <h2 class="prompt-heading font-display text-xl font-bold">education</h2>
+      <ol class="mt-6 space-y-6">
+        <li v-for="e in cv.education" :key="`${e.title.en}-${e.start}`">
+          <p class="eyebrow text-muted">{{ formatRange(e.start, e.end) }}</p>
+          <h3 class="mt-1 font-display font-semibold">
+            {{ e.title.en }}
+            <span v-if="e.grade" class="font-normal text-accent">· {{ e.grade }}</span>
+          </h3>
+          <p v-if="e.org" class="text-sm text-muted">{{ e.org }}</p>
+          <p v-if="e.note" class="mt-1.5 text-sm leading-relaxed text-muted">{{ e.note.en }}</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Internships and voluntary work -->
+    <section class="mt-14">
+      <h2 class="prompt-heading font-display text-xl font-bold">internships</h2>
+      <ol class="mt-6 space-y-4">
+        <li v-for="p in cv.internships" :key="`${p.org}-${p.start}`" class="sm:flex sm:gap-4">
+          <p class="eyebrow shrink-0 pt-0.5 text-muted sm:w-44">
+            {{ formatRange(p.start, p.end) }}
+          </p>
+          <div>
+            <h3 class="font-display text-sm font-semibold">{{ p.title.en }}</h3>
+            <p class="text-sm text-muted">
+              {{ p.org }}<template v-if="p.note"> — {{ p.note.en }}</template>
+            </p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Skills, languages, certificates -->
+    <section class="mt-14 grid gap-10 sm:grid-cols-2">
+      <div>
+        <h2 class="prompt-heading font-display text-xl font-bold">skills</h2>
+        <dl class="mt-5 space-y-4">
+          <div v-for="s in cv.skills" :key="s.group.en">
+            <dt class="eyebrow text-accent-2">{{ s.group.en }}</dt>
+            <dd class="mt-1.5 text-sm text-muted">{{ s.items.join(' · ') }}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div>
+        <h2 class="prompt-heading font-display text-xl font-bold">languages</h2>
+        <dl class="mt-5 space-y-2">
+          <div v-for="l in cv.languages" :key="l.name.en" class="flex gap-2 text-sm">
+            <dt class="font-medium">{{ l.name.en }}</dt>
+            <dd class="text-muted">— {{ l.level.en }}</dd>
+          </div>
+        </dl>
+
+        <h2 class="prompt-heading mt-10 font-display text-xl font-bold">certificates</h2>
+        <ul class="mt-5 space-y-2">
+          <li v-for="c in cv.certificates" :key="c.name.en" class="text-sm">
+            <span>{{ c.name.en }}</span>
+            <span v-if="c.date" class="text-muted"> · {{ formatMonthYear(c.date) }}</span>
+          </li>
+        </ul>
+
+        <h2 class="prompt-heading mt-10 font-display text-xl font-bold">interests</h2>
+        <p class="mt-5 text-sm text-muted">
+          {{ (cv.interests ?? []).map(i => i.en).join(' · ') }}
+        </p>
+      </div>
+    </section>
+  </div>
+</template>

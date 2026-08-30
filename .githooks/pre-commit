@@ -1,0 +1,41 @@
+#!/bin/sh
+# Block commits that fail tests or lint. This repo has no CI, so this hook is
+# the only automated gate — see CLAUDE.md.
+#
+# Enable once per clone:   git config core.hooksPath .githooks
+# Bypass for one commit:   git commit --no-verify
+#
+# Tests run first: they're the faster of the two, so a real breakage surfaces
+# before you wait on eslint. Output is captured and only printed on failure, so
+# a passing commit stays quiet.
+
+# Private CV data must never reach a commit. Runs first because it is the
+# fastest check and the only one whose failure cannot be undone by a later fix
+# — once a value is in a commit it is in the history and in every clone.
+
+if ! npm run --silent privacy:check; then
+  echo
+  echo "pre-commit: private data found — commit blocked."
+  exit 1
+fi
+
+if ! out=$(npm run --silent test 2>&1); then
+  echo "$out"
+  echo
+  echo "pre-commit: tests failed — commit blocked."
+  echo "  run them yourself:  npm test"
+  echo "  commit anyway:      git commit --no-verify"
+  exit 1
+fi
+
+# eslint exits non-zero only on errors, so warnings never block a commit.
+# `--quiet` hides them here so a passing commit prints nothing — run
+# `npm run lint` by hand to see them.
+
+if ! npm run --silent lint -- --quiet; then
+  echo
+  echo "pre-commit: eslint found errors — commit blocked."
+  echo "  fix automatically:  npm run lint:fix"
+  echo "  commit anyway:      git commit --no-verify"
+  exit 1
+fi

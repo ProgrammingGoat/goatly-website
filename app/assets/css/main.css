@@ -1,0 +1,276 @@
+@import "tailwindcss";
+
+/* Enable class-based dark mode (toggle adds `.dark` to <html>). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+   Palette — terminal. Near-black ground, amber accent.
+
+   Amber rather than the usual terminal green because it carries the goat
+   (goatly.dev, @ProgrammingGoat) as well as the VT220 reference, and because it
+   leaves green free to mean what it means in a shell: the prompt, and success.
+   Green is therefore NOT a general-purpose accent — see --accent-2 below.
+--------------------------------------------------------------------------- */
+
+/* Light theme = warm paper terminal, not stark white, so long reads don't
+   glare. The accents darken here: the dark-theme amber is a 2.3:1 blur on
+   paper, and an accent is often a link. */
+:root {
+  --bg: #fbf7ef;
+  --surface: #ffffff;
+  --surface-2: #f1ece0;
+  --text: #1c2128;
+  --muted: #5f6672;
+  --border: #e2dccd;
+  --accent: #8a5f0a;
+  --accent-2: #1a7f37;
+  --accent-hover: #6f4c07;
+  --accent-contrast: #ffffff;
+}
+
+.dark {
+  --bg: #0e1116;
+  --surface: #161b22;
+  --surface-2: #1c2128;
+  --text: #c9d1d9;
+  --muted: #8b949e;
+  --border: #30363d;
+  --accent: #e3b341;
+  --accent-2: #3fb950;
+  --accent-hover: #f0c661;
+  --accent-contrast: #0e1116;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-contrast: var(--accent-contrast);
+
+  /* The display face IS the mono here — that's the whole theme. Inter carries
+     body prose only, because a full-mono About page is tiring to read. */
+  --font-display: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+::selection {
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+body,
+.theme-transition {
+  transition: background-color 0.2s ease, color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* ---------------------------------------------------------------------------
+   Signature: the prompt. Used sparingly — the wordmark, active nav, and the
+   rule above a section heading. Everything else stays quiet.
+--------------------------------------------------------------------------- */
+.prompt-text {
+  color: var(--accent);
+}
+
+/* The `$` before a section heading. A pseudo-element so it never lands in the
+   accessibility tree — a screen reader announcing "dollar Projects" is noise. */
+.prompt-heading::before {
+  content: "$ ";
+  color: var(--accent-2);
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+.prompt-bar {
+  height: 2px;
+  border-radius: 2px;
+  background-color: var(--accent);
+}
+
+.prompt-underline {
+  background-image: linear-gradient(90deg, var(--accent), var(--accent));
+  background-size: 100% 2px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+}
+
+/* Block cursor. Sized in `ch` so it matches the mono column it sits in. */
+.prompt-cursor {
+  display: inline-block;
+  width: 1ch;
+  height: 1.05em;
+  vertical-align: text-bottom;
+  background-color: var(--accent);
+  animation: blink 1.1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* A blinking cursor is a genuine problem for some vestibular and attention
+   conditions, and it is decoration either way — so it simply stops. */
+@media (prefers-reduced-motion: reduce) {
+  .prompt-cursor {
+    animation: none;
+  }
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Text sitting directly on a screenshot. A soft shadow does the legibility work
+   a full-cover scrim would, without veiling the image. */
+.on-art {
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.55), 0 2px 14px rgb(0 0 0 / 0.45);
+}
+.on-art-sm {
+  text-shadow: 0 1px 3px rgb(0 0 0 / 0.6);
+}
+/* Icons need the filter version — text-shadow never reaches an SVG stroke. */
+.on-art-icon {
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.55));
+}
+
+/* Placeholder behind an entry with no cover image. Fixed hexes, not the accent
+   tokens: the light theme darkens those for contrast, which turns a full-bleed
+   surface muddy. Matches the palette in app/utils/cover.ts. Not animated — a
+   placeholder that draws the eye is a placeholder doing the wrong job. */
+.hero-fallback {
+  background-image: linear-gradient(125deg, #161b22, #30363d 55%, #e3b341);
+}
+
+/* ---------------------------------------------------------------------------
+   Prose — rendered markdown.
+--------------------------------------------------------------------------- */
+.prose {
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 1.05rem;
+}
+.prose > * + * {
+  margin-top: 1.25em;
+}
+.prose-compact {
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-top: 2em;
+  margin-bottom: 0.6em;
+}
+.prose h2 {
+  font-size: 1.45rem;
+}
+.prose h3 {
+  font-size: 1.2rem;
+}
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.prose a:hover {
+  color: var(--accent-hover);
+}
+/* Nuxt Content wraps heading text in a self-link. Still a useful anchor to
+   copy, but it must read as a heading, not as a link in the body. */
+.prose :is(h1, h2, h3, h4) a {
+  color: inherit;
+  text-decoration: none;
+}
+.prose :is(h1, h2, h3, h4) a:hover {
+  color: var(--accent);
+}
+.prose strong {
+  color: var(--text);
+  font-weight: 700;
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+}
+.prose ul {
+  list-style: disc;
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose li + li {
+  margin-top: 0.35em;
+}
+.prose blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: 1em;
+  color: var(--muted);
+}
+.prose img {
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+}
+.prose code {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 0.25rem;
+  padding: 0.15em 0.4em;
+  font-size: 0.9em;
+  font-family: var(--font-mono);
+}
+/* Code blocks keep the dark terminal ground in both themes — a code block is a
+   terminal, and this site has opinions about that. */
+.prose pre {
+  background: #0e1116;
+  color: #c9d1d9;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+}
+.prose pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+}

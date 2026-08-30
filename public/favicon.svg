@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-label="goatly.dev">
+  <!--
+    Prompt glyph from Tabler Icons (icons/outline/terminal.svg),
+    Copyright (c) 2020-2026 Paweł Kuna, MIT — licenses/tabler-icons/LICENSE.
+
+    Changes: recoloured to the site's amber accent, stroke-width raised from 2
+    to 2.6, and placed on a rounded plate in the terminal ground colour.
+
+    The plate is doing the work of a window frame, which is why the boxed
+    `terminal-2` glyph was not used: at 16px its border and the glyph inside it
+    collapse into each other, and a favicon spends most of its life at 16px.
+  -->
+  <rect width="24" height="24" rx="5.5" fill="#0e1116"/>
+  <g fill="none" stroke="#e3b341" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5 7l5 5l-5 5"/>
+    <path d="M12 19l7 0"/>
+  </g>
+</svg>

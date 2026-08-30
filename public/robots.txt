@@ -1,0 +1,6 @@
+User-Agent: *
+Disallow: /admin/
+
+# Absolute by spec — and hardcoded, so it needs changing by hand if the
+# canonical origin in nuxt.config ever does.
+Sitemap: https://goatly.dev/sitemap.xml
