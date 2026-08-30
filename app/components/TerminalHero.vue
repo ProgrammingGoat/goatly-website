@@ -46,10 +46,6 @@ onMounted(() => {
 
 <template>
   <section class="relative mx-auto w-full max-w-6xl px-5 pb-16 pt-28 sm:px-8 sm:pb-24 sm:pt-36">
-    <!-- Phosphor bloom behind the glass. Sits under the window, never over
-         text, so it can be generous without costing any legibility. -->
-    <div class="crt-glow" aria-hidden="true" />
-
     <!-- The window is chrome around real content: the title bar and the prompt
          lines are aria-hidden, the h1 and the stack are not. -->
     <div class="crt relative overflow-hidden rounded-xl border border-border bg-surface shadow-2xl shadow-black/30">
@@ -140,7 +136,7 @@ onMounted(() => {
    The signature: a CRT coming on.
 
    Not a fade — a real tube opens as a thin bright line that widens, then
-   unrolls vertically, then the bloom decays. Pure CSS on purpose: the page is
+   unrolls vertically, then the brightness decays. Pure CSS on purpose: the page is
    prerendered, so gating any of this on JS would leave the hero blank for a
    visitor without it. The content fades in only after the scale finishes, so
    it is never seen stretched.
@@ -229,38 +225,11 @@ onMounted(() => {
   opacity: 0.25;
 }
 
-.crt-glow {
-  position: absolute;
-  /* Tracks the window rather than the section: the top offset matches the
-     section's pt-28/pt-36, so the haze sits behind the glass instead of
-     hanging above it in the header. */
-  inset: 7rem 6% auto 6%;
-  height: 60%;
-  border-radius: 50%;
-  background: var(--accent);
-  opacity: 0;
-  filter: blur(100px);
-  animation: bloom 1.4s ease-out 320ms forwards;
-}
-
-@media (min-width: 640px) {
-  .crt-glow { top: 9rem; }
-}
-
-/* The glow is a dark-theme effect. On the paper theme a coloured haze behind
-   the window reads as a print artefact, not phosphor. */
-:root:not(.dark) .crt-glow {
-  display: none;
-}
-
-@keyframes bloom {
-  from { opacity: 0; }
-  to { opacity: 0.16; }
-}
-
-/* No text-shadow on the type. A phosphor bloom on every accent glyph muddied
-   the letterforms without adding anything the backlight does not already say —
-   the ambient glow behind the glass carries the effect on its own. */
+/* No text-shadow on the type: a phosphor bloom on every accent glyph muddied
+   the letterforms. There is no ambient glow behind the glass either — see
+   CLAUDE.md; both versions of one read as a shape stuck onto the page rather
+   than as light. The window's depth is its border and its drop shadow, and on
+   the lifted ground that is enough. */
 
 /* ---------------------------------------------------------------------------
    The typed sequence. Each line takes its delay from --d, rather than from
@@ -332,7 +301,7 @@ onMounted(() => {
 }
 
 /* ---------------------------------------------------------------------------
-   Reduced motion: no power-on, no typing, no bloom, no lift. Everything is in
+   Reduced motion: no power-on, no typing, no lift. Everything is in
    its natural, fully visible state — which is why every animation above runs
    hidden→visible rather than the other way round. The scramble is skipped in
    the script for the same reason.
@@ -341,12 +310,8 @@ onMounted(() => {
   .crt,
   .crt-body,
   .t-cmd,
-  .t-out,
-  .crt-glow {
+  .t-out {
     animation: none;
-  }
-  .crt-glow {
-    opacity: 0.12;
   }
   .btn:hover {
     transform: none;

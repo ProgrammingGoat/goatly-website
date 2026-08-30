@@ -146,6 +146,12 @@ this script** without a concrete failure it would have caught.
   carries most of a content page. If it ever moves again, move it as a ramp;
   lifting `--bg` alone would flatten the terminal window against the page.
 
+  Anything tuned *against* the ground moves with it. The hero's amber backlight
+  was the case in point: a bloom is only ever the difference between the haze
+  and the page behind it, so the lifted ground washed it out, and raising it to
+  compensate is what exposed it as a shape rather than as light. It is gone —
+  see *Design direction*.
+
   `.prose pre` keeps the old `#0e1116` on purpose — a code block is a terminal,
   and against the lifted ground it now reads as an inset rather than dissolving
   into the page.
@@ -200,9 +206,20 @@ this script** without a concrete failure it would have caught.
   disciplined mono on near-black. If whimsy gets added again, it has to be in
   the site's own material — type, prompt, terminal — not on top of it.
 
-- **No text-shadow on the type.** A phosphor bloom on every accent glyph was
-  tried and muddied the letterforms; the ambient backlight behind the glass
-  (`.crt-glow`) carries the effect on its own.
+- **No text-shadow on the type**, and **no glow behind the glass.** A phosphor
+  bloom on every accent glyph was tried and muddied the letterforms. An ambient
+  amber backlight behind the terminal window was then tried twice — first as a
+  free ellipse positioned against the section, then as the window's own
+  silhouette blurred behind it — and **both were removed.** The ellipse read as
+  an airbrush stroke, an amber shape with no relation to the thing it was
+  supposed to be radiating from; taking the shape from the window fixed that
+  specific fault and still read as something stuck onto the page rather than as
+  light. The lifted ground gives the window enough contrast on its own, so the
+  depth is now its border and its drop shadow, and nothing else.
+
+  Anyone re-adding one is re-opening a settled question: the bar is that it has
+  to read as light in the room, not as a coloured shape on the background, and
+  two reasonable attempts did not clear it.
 
 #### Accessibility is part of the theme, not a later pass
 
