@@ -6,9 +6,8 @@ import { site } from '~/site'
  *
  * This is the site's one easter egg, and it is native to the design rather
  * than pasted onto it: the hero already looks like a terminal, so the reward
- * for poking at it is that it behaves like one. It stays completely inert
- * until someone clicks or tabs into it, which is what makes it safe on a page
- * a recruiter also has to use — they see the same static prompt as before.
+ * for poking at it is that it behaves like one. It looks exactly like the
+ * static prompt it replaced, so a recruiter who ignores it loses nothing.
  *
  * Not a toy shell over the whole page: it can only navigate, print, and toggle
  * the theme. Nothing here can put the visitor somewhere they cannot get back
@@ -144,6 +143,15 @@ function run(raw: string) {
 }
 
 function onKey(e: KeyboardEvent) {
+  // The way back out. Once the prompt has the keyboard it also has space and
+  // the arrow keys, so there has to be a one-key release that hands page
+  // scrolling back — otherwise a stray keystroke traps the reader in a toy.
+  if (e.key === 'Escape') {
+    input.value = ''
+    inputEl.value?.blur()
+    return
+  }
+
   if (e.key === 'Enter') {
     run(input.value)
     input.value = ''
@@ -173,6 +181,50 @@ function onKey(e: KeyboardEvent) {
     if (hit) input.value = [...parts, hit].join(' ')
   }
 }
+
+/**
+ * Type-to-focus.
+ *
+ * A blinking cursor and a `type help` hint promise a prompt that is listening,
+ * and then demanding a click first made the shell read as broken rather than
+ * as inert. So a printable keystroke anywhere on the page lands in the prompt
+ * — provided nothing else has a claim on it.
+ *
+ * The guards are the whole design. The keystroke is only taken when no other
+ * field is focused, no shortcut modifier is held, and the prompt is actually
+ * on screen: a page a reader has scrolled past must never yank itself back to
+ * the hero because they hit a key. `Escape` gives the keyboard back.
+ */
+function onGlobalKey(e: KeyboardEvent) {
+  if (focused.value || e.isComposing) return
+
+  // AltGr surfaces as ctrl+alt on Windows layouts and does produce a real
+  // character, so only a lone Ctrl or Alt means "this is a shortcut".
+  if (e.metaKey || e.ctrlKey !== e.altKey) return
+
+  // Space scrolls the page, and no command begins with one.
+  if (e.key.length !== 1 || e.key === ' ') return
+
+  const el = inputEl.value
+  if (!el) return
+
+  const active = document.activeElement
+  if (active instanceof HTMLElement
+    && (active.isContentEditable || /^(?:input|textarea|select)$/i.test(active.tagName))) return
+
+  const box = el.getBoundingClientRect()
+  if (box.bottom < 0 || box.top > window.innerHeight) return
+
+  // Append the character rather than letting the default land it: focusing
+  // mid-keydown does not reliably redirect the keystroke across browsers.
+  e.preventDefault()
+  input.value += e.key
+  el.focus({ preventScroll: true })
+  keepPromptInView()
+}
+
+onMounted(() => window.addEventListener('keydown', onGlobalKey))
+onBeforeUnmount(() => window.removeEventListener('keydown', onGlobalKey))
 </script>
 
 <template>

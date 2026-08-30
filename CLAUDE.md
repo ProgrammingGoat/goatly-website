@@ -172,8 +172,16 @@ this script** without a concrete failure it would have caught.
 
 - **The hero prompt is a real shell** (`TerminalShell.vue`) — the site's one
   easter egg, and deliberately native to the design rather than pasted onto it.
-  It is inert until clicked or tabbed into, so a recruiter sees the same static
-  prompt as before. It can only navigate, print and toggle the theme.
+  It looks like the static prompt it replaced, so a recruiter who ignores it
+  loses nothing. It can only navigate, print and toggle the theme.
+
+  **Typing anywhere on the page types into it**, because a blinking cursor and
+  a `type help` hint promise exactly that, and requiring a click first made it
+  read as broken. The guards on that capture are the load-bearing part: no
+  modifier held, no other field focused, and the prompt on screen — a reader
+  who has scrolled past the hero must never be yanked back to it by a
+  keystroke. `Escape` clears the line and hands the keyboard back, which is
+  what returns space and the arrow keys to page scrolling.
 
   A cursor-following goat was tried here first and removed: a full-colour emoji
   trailing the pointer reads as a sticker stuck onto a page that is otherwise
