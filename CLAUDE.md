@@ -63,7 +63,7 @@ Practically:
 ```
 content/cv/cv.yml   PUBLIC   committed · rendered on the site · in every PDF
                              name, headline, "Heidelberg, Germany", the
-                             hello@goatly.dev alias, links, experience,
+                             contact@goatly.dev alias, links, experience,
                              education, skills, certificates
 cv.private.yml      PRIVATE  gitignored · read ONLY by scripts/build-cv.ts
                              street address, phone, date of birth, photo,
@@ -80,7 +80,7 @@ cv.private.yml      PRIVATE  gitignored · read ONLY by scripts/build-cv.ts
   date of birth, no photo. (A German CV conventionally has a photo; the web
   version does not need one, and leaving it out is better anti-discrimination
   practice besides. It stays in the application PDF.)
-- The site knows only `hello@goatly.dev`.
+- The site knows only `contact@goatly.dev`.
 - A phone number is **not** legally required in an Impressum — EuGH C-298/07 —
   so it stays off the site entirely.
 
@@ -224,10 +224,30 @@ npm run cv -- --lang=de             # public German          → public/cv/
 npm run cv -- --lang=en             # public English         → public/cv/
 ```
 
-Rendered with **Playwright** (`page.pdf`), not wkhtmltopdf — that project is
-archived. Generated locally and committed (the public pair only) rather than
-built on Cloudflare: the image build is already the slow part of CI and
-Playwright has no business there.
+`scripts/cv-template.ts` renders the HTML; `scripts/build-cv.ts` drives the
+browser. The template uses the site's **light** palette — a dark A4 page is
+unreadable printed and floods a printer with toner — and only the sidebar and
+title bar carry the warm paper tone, so the sheet is not full-bleed ink.
+
+Rendered with `playwright-core` and a **system** Chromium (`CHROME_PATH`, or
+the usual paths), not a downloaded browser: the PDF is built locally and
+occasionally, and a 150MB download per machine is not worth it. Generated
+locally and committed (the public pair only) rather than built on Cloudflare —
+the image build is already the slow part of CI.
+
+Two things that will bite anyone editing the template:
+
+- **`privacy:check` cannot see inside a PDF.** Text in a PDF is
+  Flate-compressed, so a substring search over the committed bytes finds
+  nothing. `build-cv.ts` therefore checks the rendered HTML for private values
+  *before* printing, and refuses to write a public PDF that fails. That check is
+  the only thing standing between a template bug and a published address.
+- **Skill meters are drawn with elements, not the block characters `█`/`░`.**
+  JetBrains Mono ships no U+2588, so the fallback face supplied them at a
+  different advance width and the cells came out gapped and ragged.
+
+Fonts are loaded from Google Fonts at render time so the PDF matches the site.
+Offline, the stack falls back to a system mono and the layout still holds.
 
 ## Commands
 

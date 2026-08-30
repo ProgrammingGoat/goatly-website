@@ -12,6 +12,7 @@
     "typecheck": "nuxt typecheck",
     "test": "vitest run",
     "test:watch": "vitest",
+    "cv": "node scripts/build-cv.ts",
     "privacy:check": "node scripts/privacy-check.ts",
     "postinstall": "nuxt prepare"
   },
@@ -29,6 +30,7 @@
     "@nuxt/eslint": "^1.17.0",
     "eslint": "^10.8.1",
     "image-meta": "^0.2.2",
+    "playwright-core": "^1.62.1",
     "vitest": "^4.1.10",
     "vue-tsc": "^3.3.9",
     "yaml": "^2.9.0"

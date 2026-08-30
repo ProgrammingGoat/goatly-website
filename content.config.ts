@@ -101,14 +101,31 @@ export default defineContentConfig({
 
         // Grouped rather than a flat list, because the PDF's sidebar renders
         // them as headed blocks and the web page as labelled rows.
+        //
+        // `level` (0-100) is optional and drives the PDF's block meters. The
+        // web page ignores it: a self-assessed percentage reads as padding on a
+        // portfolio site, but it is expected on a German Lebenslauf.
         skills: z.array(z.object({
           group: t,
-          items: z.array(z.string()),
+          items: z.array(z.object({
+            // Most skill names are the same in both languages (Java, Vue), so a
+            // plain string is the common case. The localised form is there for
+            // the ones that genuinely differ — "AI-assisted development" is
+            // "KI-gestützte Entwicklung" on a German Lebenslauf.
+            name: z.union([z.string(), t]),
+            level: z.number().min(0).max(100).optional(),
+          })),
         })).default([]),
+
+        // Sidebar only, and PDF only — the web CV says this with prose on
+        // /about instead, where it can be specific rather than a word list.
+        softSkills: z.array(t).default([]),
 
         languages: z.array(z.object({
           name: t,
           level: t,
+          /** 0-100, for the PDF's meters. The web page shows `level` instead. */
+          meter: z.number().min(0).max(100).optional(),
         })).default([]),
 
         certificates: z.array(z.object({

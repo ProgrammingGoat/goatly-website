@@ -27,7 +27,7 @@
  */
 export const legal = {
   name: 'Lukas Brackmann',
-  email: 'hello@goatly.dev',
+  email: 'contact@goatly.dev',
 
   /** TODO(legal): ladungsfähige Anschrift, or null while undecided. */
   address: null as string[] | null,

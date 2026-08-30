@@ -20,7 +20,7 @@ export const site = {
   role: 'Full-Stack Developer',
   /** City and country only — never a street. */
   location: 'Heidelberg, Germany',
-  email: 'hello@goatly.dev',
+  email: 'contact@goatly.dev',
 
   // Where to find me. An entry with an empty `url` is skipped everywhere, so
   // it's safe to leave a placeholder here until the account exists.
@@ -42,8 +42,8 @@ export const site = {
     {
       label: 'Email',
       icon: 'mail',
-      handle: 'hello@goatly.dev',
-      url: 'mailto:hello@goatly.dev',
+      handle: 'contact@goatly.dev',
+      url: 'mailto:contact@goatly.dev',
     },
   ],
 

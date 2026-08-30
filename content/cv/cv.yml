@@ -17,7 +17,7 @@ location:
   en: Heidelberg, Germany
   de: Heidelberg, Deutschland
 
-email: hello@goatly.dev
+email: contact@goatly.dev
 
 links:
   - label: goatly.dev
@@ -139,19 +139,44 @@ skills:
   - group:
       en: Languages
       de: Programmiersprachen
-    items: [Python, JavaScript/TypeScript, Java, 'C#']
+    items:
+      - { name: Python, level: 80 }
+      - { name: JavaScript/TypeScript, level: 80 }
+      - { name: Java, level: 80 }
+      - { name: 'C#', level: 60 }
   - group:
       en: Web
       de: Web Development
-    items: [Vue, Angular, HTML/CSS, PHP]
+    items:
+      - { name: Vue, level: 80 }
+      - { name: Angular, level: 80 }
+      - { name: HTML/CSS, level: 80 }
+      - { name: PHP, level: 40 }
   - group:
       en: Frameworks & tools
       de: Frameworks / Tools
-    items: [Spring, Docker, Playwright, Git, JIRA, 'AI-assisted development (Claude Code)']
+    items:
+      - { name: Spring, level: 80 }
+      - { name: Docker, level: 80 }
+      - { name: Playwright, level: 60 }
+      - { name: Git, level: 80 }
+      - { name: JIRA, level: 80 }
+      - name: { en: 'AI-assisted development (Claude Code)', de: 'KI-gestützte Entwicklung (Claude Code)' }
+        level: 80
   - group:
       en: Databases
       de: Datenbanken
-    items: [MySQL, MS SQL]
+    items:
+      - { name: MySQL, level: 60 }
+      - { name: MS SQL, level: 60 }
+
+# PDF sidebar only — the web CV says this with prose on /about instead.
+softSkills:
+  - { en: Sense of responsibility, de: Verantwortungsbewusstsein }
+  - { en: Teamwork, de: Teamfähigkeit }
+  - { en: Quick comprehension, de: Auffassungsgabe }
+  - { en: Diligence, de: Sorgfalt }
+  - { en: Creativity, de: Kreativität }
 
 languages:
   - name:
@@ -160,12 +185,14 @@ languages:
     level:
       en: Native
       de: Muttersprache
+    meter: 100
   - name:
       en: English
       de: Englisch
     level:
       en: B2
       de: B2
+    meter: 80
 
 certificates:
   - name:
