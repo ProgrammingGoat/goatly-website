@@ -19,6 +19,7 @@
     "cv": "node scripts/build-cv.ts",
     "letter": "node scripts/build-letter.ts",
     "privacy:check": "node scripts/privacy-check.ts",
+    "cv:check": "node scripts/check-cv-fresh.ts",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {

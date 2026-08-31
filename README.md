@@ -20,8 +20,8 @@ npm run dev                           # http://localhost:3000
 
 **Enable the hook.** There is no CI, so `.githooks/pre-commit` is the only
 automated gate — and git ignores it until `core.hooksPath` is set, so a fresh
-clone silently runs no checks at all. It runs `privacy:check`, the tests, then
-lint. Bypass once with `git commit --no-verify`.
+clone silently runs no checks at all. It runs `privacy:check`, `cv:check`, the
+tests, then lint. Bypass once with `git commit --no-verify`.
 
 ## Commands
 
@@ -36,6 +36,7 @@ lint. Bypass once with `git commit --no-verify`.
 | `npm run lint:fix` | …and fix what it can |
 | `npm run typecheck` | `vue-tsc` over `app/`, `server/` and `nuxt.config.ts` |
 | `npm run privacy:check` | Fail if private data reached a public file |
+| `npm run cv:check` | Fail if the committed CV PDFs are stale |
 | `npm run cv` | Build both public CV PDFs — see below |
 | `npm run letter -- <file.md>` | Build one Anschreiben PDF — see below |
 

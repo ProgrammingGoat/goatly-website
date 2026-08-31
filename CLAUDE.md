@@ -379,6 +379,32 @@ occasionally, and a 150MB download per machine is not worth it. Generated
 locally and committed (the public pair only) rather than built on Cloudflare —
 the image build is already the slow part of CI.
 
+### The PDFs go stale silently — `scripts/cv-freshness.ts`
+
+`npm run cv` is a manual step, so editing `cv.yml` and committing without
+rerunning it leaves the site serving a web CV and a PDF that disagree about the
+same job. Nothing errors and nothing looks broken; the first reader to notice
+is a recruiter with both open. `cv:check` runs in the pre-commit hook and
+blocks that.
+
+It compares a **hash of the rendered HTML** against `public/cv/manifest.json`,
+which `build-cv.ts` writes in the same pass that prints the PDFs. Three
+alternatives were considered and do not work:
+
+- **File mtimes** — git does not preserve them, so every file in a fresh clone
+  is stamped at checkout time and the comparison is meaningless.
+- **Reading the PDF back** — Chromium embeds subset fonts with custom glyph
+  encoding, so inflating the content streams yields no readable text. Verified,
+  and it is the same wall `privacy:check` hits.
+- **Hashing `cv.yml`** — fires on comments and reindentation, which change
+  nothing in the output. A check that cries wolf gets `--no-verify`'d, and then
+  it is worse than nothing.
+
+Hashing the render is exact in both directions: it fires on a real content
+change and stays silent on a refactor that does not alter output. The
+letterhead extraction produced byte-identical HTML and would have tripped any
+source-file-based check.
+
 Two things that will bite anyone editing the template:
 
 - **`privacy:check` cannot see inside a PDF.** Text in a PDF is
@@ -419,8 +445,8 @@ enabling once per clone** — git otherwise silently runs no hook at all:
 git config core.hooksPath .githooks
 ```
 
-It runs `privacy:check`, then `npm test`, then `npm run lint`, and blocks the
-commit if any fails. Bypass once with `git commit --no-verify`.
+It runs `privacy:check`, then `cv:check`, then `npm test`, then `npm run lint`,
+and blocks the commit if any fails. Bypass once with `git commit --no-verify`.
 
 `npm run typecheck` is deliberately **not** in the hook — it needs `.nuxt/`
 prepared and takes ~9s against the suite's ~0.5s. Run it by hand before pushing

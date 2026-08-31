@@ -27,11 +27,12 @@
  * and a 150MB download per machine is not worth it.
  */
 
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { parse } from 'yaml'
 import { legal } from '../app/legal.ts'
 import { renderCv, type CvData, type Lang } from './cv-template.ts'
+import { hashHtml, MANIFEST, pdfName, PUBLIC_LANGS } from './cv-freshness.ts'
 import { launch, printPdf } from './pdf.ts'
 
 /** Both are always built together — see the note at the top of the file. */
@@ -128,11 +129,14 @@ async function main() {
     = (args.includes('--all') ? [false, true] : [args.includes('--private')])
       .flatMap(isPrivate => LANGS.map(lang => ({ lang, isPrivate })))
 
+  const built: Record<string, string> = {}
+
   const browser = await launch()
   try {
     for (const { lang, isPrivate } of jobs) {
       const data = loadData(isPrivate)
       const html = renderCv(data, lang)
+      if (!isPrivate) built[pdfName(data.name, lang)] = hashHtml(html)
 
       if (!isPrivate) assertNoPrivateData(html, lang)
 
@@ -152,6 +156,13 @@ async function main() {
   }
   finally {
     await browser.close()
+  }
+
+  // Only after a full public pair, so a partial run cannot leave a manifest
+  // claiming more than was printed.
+  if (PUBLIC_LANGS.every(l => built[pdfName(loadData(false).name, l)])) {
+    writeFileSync(MANIFEST, JSON.stringify(built, null, 2) + '\n')
+    console.log(`manifest  ${MANIFEST}`)
   }
 }
 

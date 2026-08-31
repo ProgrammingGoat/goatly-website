@@ -19,6 +19,17 @@ if ! npm run --silent privacy:check; then
   exit 1
 fi
 
+# The CV PDFs are built by hand and committed, so editing cv.yml without
+# rerunning `npm run cv` ships a web CV and a PDF that disagree. Nothing else
+# catches that — see scripts/cv-freshness.ts. Cheap: it renders the HTML and
+# hashes it, no browser.
+
+if ! npm run --silent cv:check; then
+  echo
+  echo "pre-commit: CV PDFs are stale — commit blocked."
+  exit 1
+fi
+
 if ! out=$(npm run --silent test 2>&1); then
   echo "$out"
   echo
