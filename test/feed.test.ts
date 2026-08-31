@@ -9,10 +9,10 @@ const channel: FeedChannel = {
 }
 
 const entry = (over: Partial<FeedEntry> = {}): FeedEntry => ({
-  title: 'A piece',
-  path: '/projects/a-piece',
+  title: 'A project',
+  path: '/projects/a-project',
   date: '2026-01-01',
-  category: 'Art',
+  category: 'Projects',
   ...over,
 })
 
@@ -73,16 +73,16 @@ describe('buildFeed', () => {
     expect(titles(xml)).toEqual(['Published'])
   })
 
-  it('orders newest first across collections', () => {
+  it('orders newest first', () => {
     const xml = buildFeed(
       [
-        entry({ title: 'Older art', date: '2026-01-01', category: 'Art' }),
-        entry({ title: 'Newest post', date: '2026-08-07', category: 'Blog' }),
-        entry({ title: 'Middle project', date: '2026-04-03', category: 'Projects' }),
+        entry({ title: 'Older project', date: '2026-01-01' }),
+        entry({ title: 'Newest project', date: '2026-08-07' }),
+        entry({ title: 'Middle project', date: '2026-04-03' }),
       ],
       channel,
     )
-    expect(titles(xml)).toEqual(['Newest post', 'Middle project', 'Older art'])
+    expect(titles(xml)).toEqual(['Newest project', 'Middle project', 'Older project'])
   })
 
   it(`caps the feed at ${FEED_MAX} entries, keeping the newest`, () => {

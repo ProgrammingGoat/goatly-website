@@ -6,7 +6,7 @@ import { site } from '~/site'
  * one graph.
  */
 
-/** Whatever the three collections have in common, plus art's `medium`. */
+/** Whatever an entry has that the schema can use. */
 type Entry = {
   title?: string
   description?: string
@@ -14,7 +14,6 @@ type Entry = {
   cover?: string
   path?: string
   tags?: string[]
-  medium?: string
 }
 
 /**
@@ -23,7 +22,6 @@ type Entry = {
  * `datePublished`, an artwork `name` and `dateCreated`.
  */
 const SHAPES = {
-  VisualArtwork: { title: 'name', date: 'dateCreated', person: 'creator' },
   BlogPosting: { title: 'headline', date: 'datePublished', person: 'author' },
   CreativeWork: { title: 'name', date: 'dateCreated', person: 'creator' },
 } as const
@@ -53,8 +51,6 @@ export function useEntrySchema(
       'description': doc.description,
       'image': doc.cover ? absolute(doc.cover) : undefined,
       'keywords': doc.tags?.length ? doc.tags : undefined,
-      // Only artwork has a medium, and only VisualArtwork defines the property.
-      'artMedium': type === 'VisualArtwork' ? doc.medium : undefined,
     })
   })
 

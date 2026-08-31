@@ -14,7 +14,7 @@ export type TagCount = {
 }
 
 /**
- * Tags are free text in frontmatter, so "Sketch" and "sketch" are one tag
+ * Tags are free text in frontmatter, so "Vue" and "vue" are one tag
  * typed two ways. Folded for matching; the original spelling is what's shown.
  */
 export function foldTag(tag: string): string {

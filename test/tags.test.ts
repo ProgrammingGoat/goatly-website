@@ -3,8 +3,8 @@ import { collectTags, foldTag, hasTag } from '../app/utils/tags'
 
 describe('foldTag', () => {
   it('folds case and surrounding space, so one tag stays one tag', () => {
-    expect(foldTag('Sketch')).toBe('sketch')
-    expect(foldTag('  sketch ')).toBe('sketch')
+    expect(foldTag('Testing')).toBe('testing')
+    expect(foldTag('  testing ')).toBe('testing')
   })
 })
 
@@ -13,24 +13,24 @@ describe('collectTags', () => {
     // The failure this guards is quiet: the pill renders, and only clicking it
     // reveals a filter that matches nothing.
     const tags = collectTags([
-      { tags: ['Sketch'] },
-      { tags: ['sketch'] },
-      { tags: [' SKETCH '] },
+      { tags: ['TypeScript'] },
+      { tags: ['typescript'] },
+      { tags: [' TYPESCRIPT '] },
     ])
-    expect(tags).toEqual([{ key: 'sketch', label: 'Sketch', count: 3 }])
+    expect(tags).toEqual([{ key: 'typescript', label: 'TypeScript', count: 3 }])
   })
 
   it('keeps the first spelling seen for display', () => {
-    expect(collectTags([{ tags: ['Ink'] }, { tags: ['ink'] }])[0]?.label).toBe('Ink')
+    expect(collectTags([{ tags: ['Vue'] }, { tags: ['vue'] }])[0]?.label).toBe('Vue')
   })
 
   it('orders by count, then alphabetically', () => {
     const tags = collectTags([
-      { tags: ['zebra', 'ink'] },
-      { tags: ['ink'] },
-      { tags: ['apple'] },
+      { tags: ['vue', 'testing'] },
+      { tags: ['testing'] },
+      { tags: ['api'] },
     ])
-    expect(tags.map(t => t.key)).toEqual(['ink', 'apple', 'zebra'])
+    expect(tags.map(t => t.key)).toEqual(['testing', 'api', 'vue'])
   })
 
   it('skips blank tags and entries with none', () => {
@@ -40,8 +40,8 @@ describe('collectTags', () => {
 
 describe('hasTag', () => {
   it('matches on the folded form', () => {
-    expect(hasTag({ tags: ['Ink', 'Sketch'] }, 'sketch')).toBe(true)
-    expect(hasTag({ tags: ['Ink'] }, 'sketch')).toBe(false)
-    expect(hasTag({}, 'sketch')).toBe(false)
+    expect(hasTag({ tags: ['Vue', 'Testing'] }, 'testing')).toBe(true)
+    expect(hasTag({ tags: ['Vue'] }, 'testing')).toBe(false)
+    expect(hasTag({}, 'testing')).toBe(false)
   })
 })
