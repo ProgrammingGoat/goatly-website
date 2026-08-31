@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { site } from '~/site'
 
-// TODO(copy): the stack line — the four things you most want to be hired for.
-const stack = ['Java', 'Spring', 'Vue', 'TypeScript']
+const stack = ['Vue', 'Angular', 'TypeScript', 'Java', 'Spring']
 
 const nameEl = ref<HTMLElement | null>(null)
 

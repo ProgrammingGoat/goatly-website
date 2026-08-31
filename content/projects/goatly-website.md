@@ -2,6 +2,7 @@
 title: goatly.dev
 date: 2026-08-30
 description: This site — a static Nuxt 4 portfolio with a terminal theme and a CV that prints itself to PDF.
+cover: /img/projects/goatly-website.png
 kind: Web app
 role: Solo
 featured: true
@@ -18,12 +19,18 @@ links:
     url: https://github.com/ProgrammingGoat
 ---
 
-<!-- TODO(copy): rewrite this in your own voice before launch. -->
-
 A static site built with Nuxt 4 and Nuxt Content, deployed to Cloudflare Pages.
 
-The interesting part is the CV: one YAML source holds every field in both
-English and German, the website renders the English version, and a Playwright
-script prints an A4 PDF in either language. Private details live in a separate
-gitignored file that Nuxt never reads, so the published site and the repository
-carry only what is meant to be public.
+The landing page has a functional terminal that allows accessing all pages on
+the website, can toggle the theme and has a secret easter egg.
+
+The CV section has my information stored in a YAML file that holds every field
+in English and German. The English information is rendered to the website,
+while German and English can be rendered into a PDF in either language.
+The PDF follows the terminal theme of the website, while using a lighter theme for
+easier printing.
+In addition, private fields like my address and phone number are stored in a
+separate gitignored file, and can be rendered into a complete PDF using a local script.
+
+This project was built using Claude Code. Every change was reviewed, tested and
+adjusted by me.

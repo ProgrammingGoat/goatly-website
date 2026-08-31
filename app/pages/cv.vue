@@ -114,9 +114,6 @@ useHead(() => ({
                 ↓ {{ pdf.label }}
               </a>
             </div>
-            <!-- Under the buttons, in their column: it is a caption to them,
-                 not a fifth thing in the stack. -->
-            <p class="mt-3 text-sm text-muted">{{ site.cv.lead }}</p>
           </dd>
         </div>
       </dl>

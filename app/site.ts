@@ -16,7 +16,6 @@ export const site = {
   /** Shell prompt in the hero and the footer status line. */
   handle: 'lukas',
 
-  // TODO(copy): confirm how you want to describe yourself professionally.
   role: 'Full-Stack Developer',
   /** City and country only — never a street. */
   location: 'Heidelberg, Germany',
@@ -36,8 +35,8 @@ export const site = {
     {
       label: 'LinkedIn',
       icon: 'linkedin',
-      handle: '',
-      url: '', // TODO(copy): add the profile URL, or delete this entry.
+      handle: 'lukas-brackmann',
+      url: 'https://www.linkedin.com/in/lukas-brackmann/',
     },
     {
       label: 'Email',
@@ -47,36 +46,29 @@ export const site = {
     },
   ],
 
-  // TODO(copy): this is the meta description — one sentence, ~155 characters,
-  // written the way you'd introduce yourself to a recruiter.
   description:
-    'Full-stack developer in Heidelberg — Java, Spring, Vue and TypeScript, with a focus on test automation and AI-assisted development.',
+    'Full-stack developer in Heidelberg — Java, Spring, Vue and TypeScript, using modern tools for automation and AI-assisted development.',
 
   home: {
-    // TODO(copy): the line under your name in the hero.
     lead: 'I build and test web applications, mostly in Java and TypeScript.',
   },
 
   projects: {
-    // TODO(copy)
-    lead: 'Things I have built, at work and on my own time.',
-    description: 'Code projects by Lukas Brackmann — web applications, tooling, and experiments.',
+    lead: 'Things I have built through the years.',
+    description: 'Code projects by Lukas Brackmann — web applications, games, experiments.',
   },
 
   about: {
     description: 'About Lukas Brackmann — full-stack developer in Heidelberg, Germany.',
-    // TODO(copy): one string per paragraph. Written in your voice, so please
-    // rewrite these rather than shipping them as-is.
     body: [
-      'I am a full-stack developer based in Heidelberg, currently building features and fixing bugs at tts Knowledge Products.',
-      'I came to development the long way round, through an Ausbildung after several false starts, which is probably why I care more about shipping working software than about the route someone took to get there.',
-      'Outside work I 3D-print things, draw, and over-configure my Arch Linux setup. 🐐',
+      'I am a full-stack developer based in Heidelberg, building web apps and learning about AI safety.',
+      'I use modern tools and rigorous testing to ensure the highest quality.',
+      'I like goats! 🐐',
     ],
   },
 
   cv: {
-    // TODO(copy)
-    lead: 'The short version. A PDF is available in English and German.',
+    lead: 'My work experience. A PDF is available in English and German.',
     description: 'Curriculum vitae of Lukas Brackmann — full-stack developer, Heidelberg.',
   },
 }
