@@ -34,7 +34,7 @@ lint. Bypass once with `git commit --no-verify`.
 | `npm run lint:fix` | …and fix what it can |
 | `npm run typecheck` | `vue-tsc` over `app/`, `server/` and `nuxt.config.ts` |
 | `npm run privacy:check` | Fail if private data reached a public file |
-| `npm run cv -- --lang=en` | Build one CV PDF — see below |
+| `npm run cv` | Build both public CV PDFs — see below |
 
 `npm run typecheck` is deliberately not in the pre-commit hook: it needs
 `.nuxt/` prepared and takes ~9s against the suite's ~0.5s. Run it by hand
@@ -48,11 +48,9 @@ One YAML source, two renderers: the web page at `/cv`, and an A4 print
 template. Every human-readable field is an `{ en, de }` pair.
 
 ```bash
-npm run cv -- --lang=en             # public English  → public/cv/
-npm run cv -- --lang=de             # public German   → public/cv/
-npm run cv -- --lang=en --private   # full English CV → cv-out/ (gitignored)
-npm run cv -- --lang=de --private   # full Lebenslauf → cv-out/ (gitignored)
-npm run cv -- --all                 # all four
+npm run cv                 # public English + German → public/cv/
+npm run cv -- --private    # full English + German   → cv-out/ (gitignored)
+npm run cv -- --all        # all four
 ```
 
 The public pair is committed, because `/cv` links to it. The `--private` pair

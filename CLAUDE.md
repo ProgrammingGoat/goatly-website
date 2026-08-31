@@ -337,11 +337,18 @@ sense that anyone read them. The gutter is 10rem because that is what the
 widest range needs at 13px without wrapping.
 
 ```bash
-npm run cv -- --lang=de --private   # full German Lebenslauf → cv-out/ (gitignored)
-npm run cv -- --lang=en --private   # full English CV        → cv-out/ (gitignored)
-npm run cv -- --lang=de             # public German          → public/cv/
-npm run cv -- --lang=en             # public English         → public/cv/
+npm run cv                 # public English + German → public/cv/
+npm run cv -- --private    # full English + German   → cv-out/ (gitignored)
+npm run cv -- --all        # all four
 ```
+
+**A language is never built on its own.** `--lang` is gone: the two are one
+document in two renderings, and building them separately is exactly what lets
+them drift — German edited on Tuesday, English on Friday, and a pair that
+disagrees ships with nothing to catch it. `--private` picks the pair, not the
+language. An unrecognised flag is rejected rather than ignored, because
+`--private` is the only thing between the committed pair and the one carrying
+the address.
 
 `scripts/cv-template.ts` renders the HTML; `scripts/build-cv.ts` drives the
 browser. The template uses the site's **light** palette — a dark A4 page is

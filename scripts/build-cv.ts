@@ -1,11 +1,14 @@
 /**
  * Prints the CV to an A4 PDF.
  *
- *   npm run cv -- --lang=de --private   full German Lebenslauf → cv-out/
- *   npm run cv -- --lang=en --private   full English CV        → cv-out/
- *   npm run cv -- --lang=de             public German          → public/cv/
- *   npm run cv -- --lang=en             public English         → public/cv/
- *   npm run cv -- --all                 all four
+ *   npm run cv                  public English + German → public/cv/
+ *   npm run cv -- --private     full English + German   → cv-out/
+ *   npm run cv -- --all         all four
+ *
+ * A language is never built on its own. The two are one document in two
+ * renderings, and building them separately is what lets them drift: a change
+ * made to the German on Tuesday and the English on Friday ships a pair that
+ * disagrees, with nothing to catch it.
  *
  * The public pair carries no private data and is committed, because it is
  * linked from /cv. The --private pair carries the street address and phone,
@@ -30,6 +33,9 @@ import { chromium } from 'playwright-core'
 import { parse } from 'yaml'
 import { legal } from '../app/legal.ts'
 import { renderCv, type CvData, type Lang } from './cv-template.ts'
+
+/** Both are always built together — see the note at the top of the file. */
+const LANGS: Lang[] = ['en', 'de']
 
 const PUBLIC_CV = 'content/cv/cv.yml'
 const PRIVATE_CV = 'cv.private.yml'
@@ -123,27 +129,24 @@ function loadData(usePrivate: boolean): CvData {
 
 async function main() {
   const args = process.argv.slice(2)
-  const all = args.includes('--all')
-  const usePrivate = args.includes('--private')
-  const langArg = args.find(a => a.startsWith('--lang='))?.split('=')[1]
 
-  if (!all && !langArg) {
-    console.error('usage: npm run cv -- --lang=en|de [--private]   (or --all)')
+  // An unrecognised flag is rejected rather than ignored: --private is the
+  // only thing separating the committed pair from the one with the address in
+  // it, so a typo has to fail rather than quietly build the other one.
+  const KNOWN = new Set(['--private', '--all'])
+  for (const arg of args.filter(a => !KNOWN.has(a))) {
+    console.error(
+      arg.startsWith('--lang')
+        ? '--lang is gone: both languages are always built, so the pair cannot drift.'
+        : `unknown option ${arg}`,
+    )
+    console.error('usage: npm run cv [-- --private] [-- --all]')
     process.exit(1)
   }
-  if (langArg && langArg !== 'en' && langArg !== 'de') {
-    console.error(`unknown --lang=${langArg}; expected en or de`)
-    process.exit(1)
-  }
 
-  const jobs: { lang: Lang, isPrivate: boolean }[] = all
-    ? [
-        { lang: 'en', isPrivate: false },
-        { lang: 'de', isPrivate: false },
-        { lang: 'en', isPrivate: true },
-        { lang: 'de', isPrivate: true },
-      ]
-    : [{ lang: langArg as Lang, isPrivate: usePrivate }]
+  const jobs: { lang: Lang, isPrivate: boolean }[]
+    = (args.includes('--all') ? [false, true] : [args.includes('--private')])
+      .flatMap(isPrivate => LANGS.map(lang => ({ lang, isPrivate })))
 
   const browser = await chromium.launch({ executablePath: findBrowser() })
   try {
