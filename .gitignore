@@ -32,11 +32,12 @@ logs
 # The site is statically generated and this repo is public, so anything tracked
 # here is published permanently. Street address, phone, date of birth and the
 # personal email live only in cv.private.yml, which Nuxt never reads — only
-# scripts/build-cv.mjs does.
+# scripts/build-cv.ts does, and only when passed --private.
 #
-# `npm run privacy:check` fails if any value from that file reaches the build
-# output, the working tree or git history. test/privacy.test.ts asserts these
-# very rules still exist, so they cannot be dropped silently.
+# `npm run privacy:check` fails if any value from that file reaches a tracked
+# file or the build output. It does NOT scan git history: by the time a value
+# is committed it is already in every clone, which is why the check runs first
+# in .githooks/pre-commit rather than anywhere later.
 # ---------------------------------------------------------------------------
 cv.private.yml
 *.private.*
