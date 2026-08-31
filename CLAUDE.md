@@ -240,6 +240,12 @@ this script** without a concrete failure it would have caught.
 
 ### 5. Git commits
 
+- **Never commit without being asked** — but suggesting one is welcome. Make
+  the change, run the checks, say what changed, and offer the commit; then wait
+  for a yes. Committing is the author's call, and so is how the work gets
+  divided across commits: an assistant that commits eagerly forces a history the
+  author then has to rewrite. Staging counts as committing here — leave the
+  working tree dirty and let them look at it.
 - **Conventional Commits**: `type(scope): subject`.
 - Types: `feat`, `fix`, `docs`, `content`, `style`, `refactor`, `perf`, `test`,
   `build`, `ci`, `chore`. Scope optional (e.g. `feat(cv): ...`).
