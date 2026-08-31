@@ -35,6 +35,7 @@ lint. Bypass once with `git commit --no-verify`.
 | `npm run typecheck` | `vue-tsc` over `app/`, `server/` and `nuxt.config.ts` |
 | `npm run privacy:check` | Fail if private data reached a public file |
 | `npm run cv` | Build both public CV PDFs — see below |
+| `npm run letter -- <file.md>` | Build one Anschreiben PDF — see below |
 
 `npm run typecheck` is deliberately not in the pre-commit hook: it needs
 `.nuxt/` prepared and takes ~9s against the suite's ~0.5s. Run it by hand
@@ -63,6 +64,25 @@ cp docs/cv-private-template.yml cv.private.yml   # then fill it in
 
 Rendering needs a **system Chromium** — `playwright-core` is used without a
 downloaded browser. Set `CHROME_PATH` if it isn't found on the usual paths.
+
+## The Anschreiben
+
+A German cover letter on A4, laid out to DIN 5008 Form B, from Markdown with
+frontmatter. It shares the CV's letterhead, palette and type, so the two read
+as one application.
+
+```bash
+cp templates/letter.md ../applications/2026-09-acme.md
+npm run letter -- ../applications/2026-09-acme.md
+```
+
+The PDF lands beside its source, so one folder is one application. Paths
+resolve from the repo root, not your shell.
+
+**Letters belong in a private repo, not this one** — they name companies, and
+the PDF carries the postal address and phone. The script refuses to write its
+output inside this repo, because `privacy:check` cannot read inside a PDF and
+would not catch one.
 
 ## Privacy
 

@@ -11,8 +11,13 @@
  * already designed as a warm paper terminal, which is exactly the brief.
  */
 
+import {
+  BASE_CSS, esc, FONT_LINKS, icon, linkIcon, monthYear, titlebar, TITLEBAR_CSS,
+  type Lang,
+} from './letterhead.ts'
+
 type L = { en: string, de: string }
-export type Lang = 'en' | 'de'
+export type { Lang }
 
 /** Everything the template can render. Private fields are absent unless merged. */
 export type CvData = {
@@ -47,19 +52,6 @@ export type CvData = {
   }
 }
 
-const MONTHS_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-
-/** Same rule as app/utils/format.ts: parsed off the string, never via `new Date`. */
-function monthYear(input: string | undefined, lang: Lang): string {
-  if (!input) return ''
-  const m = /^(\d{4})(?:-(\d{2}))?$/.exec(input)
-  if (!m) return input
-  const [, year, month] = m
-  if (!month) return year!
-  if (lang === 'de') return `${month}/${year}`
-  return `${MONTHS_EN[Number(month) - 1] ?? ''} ${year}`.trim()
-}
-
 /**
  * The date as it appears in the gutter: always numeric MM/YYYY.
  *
@@ -85,11 +77,6 @@ const t = (v: L | undefined, lang: Lang) => (v ? v[lang] : '')
 /** A field that may be a plain string or a localised pair — skill names are both. */
 const tx = (v: string | L | undefined, lang: Lang) =>
   (typeof v === 'string' ? v : t(v, lang))
-
-/** Escape for HTML text nodes. The data is trusted, but a stray & breaks layout. */
-function esc(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-}
 
 const UI = {
   en: {
@@ -144,35 +131,6 @@ function meter(level: number | undefined): string {
  */
 function row(when: string, inner: string): string {
   return `<div class="row"><div class="when">${esc(when)}</div><div class="what">${inner}</div></div>`
-}
-
-/**
- * Contact icons — Tabler Icons (outline), MIT, Copyright (c) 2020-2026 Paweł
- * Kuna. Full text in licenses/tabler-icons/LICENSE, the same set the favicon
- * comes from. Brand marks remain the property of their owners.
- *
- * Stored as inner markup only; icon() supplies the <svg> wrapper so stroke
- * width and size are set in one place rather than in five copied headers.
- */
-const ICONS: Record<string, string> = {
-  pin: '<path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0" />',
-  phone: '<path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />',
-  mail: '<path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10" /><path d="M3 7l9 6l9 -6" />',
-  github: '<path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />',
-  web: '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M3.6 9h16.8" /><path d="M3.6 15h16.8" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" />',
-}
-
-/** A contact icon at text size, vertically centred on the first line. */
-function icon(name: string): string {
-  const body = ICONS[name]
-  if (!body) return ''
-  return '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
-    + `stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`
-}
-
-/** Which icon a link gets. Inferred from the URL so the data stays plain. */
-function linkIcon(url: string): string {
-  return /github\.com/i.test(url) ? 'github' : 'web'
 }
 
 function section(heading: string, body: string): string {
@@ -242,55 +200,11 @@ export function renderCv(cv: CvData, lang: Lang): string {
 <head>
 <meta charset="utf-8">
 <title>${esc(cv.name)} — ${ui.title}</title>
-<!-- Loaded over the network so the PDF matches the site's type. If it fails
-     (offline), the stack falls back to a system mono and the layout holds. -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+${FONT_LINKS}
 <style>
-  /* Light palette from app/assets/css/main.css. The page itself stays white:
-     the warm paper tone is used only for the sidebar and the title bar, so a
-     real printer is not asked to flood 210x297mm with ink. */
-  :root {
-    --paper: #f6f1e6;
-    --surface: #ffffff;
-    --text: #1c2128;
-    --muted: #5f6672;
-    --border: #ddd5c4;
-    --accent: #8a5f0a;
-    --accent-2: #1a7f37;
-    --mono: "IBM Plex Mono", ui-monospace, "DejaVu Sans Mono", monospace;
-    --sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
-  }
+${BASE_CSS}
 
-  @page { size: A4; margin: 0; }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    width: 210mm;
-    height: 297mm;
-    font-family: var(--sans);
-    color: var(--text);
-    background: var(--surface);
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-  /* Terminal window chrome, framing the whole sheet. Deliberately slim — it
-     should read as a considered detail, not a costume. */
-  .titlebar {
-    display: flex;
-    align-items: center;
-    gap: 2mm;
-    height: 7mm;
-    padding: 0 5mm;
-    background: var(--paper);
-    border-bottom: 0.4mm solid var(--border);
-    font-family: var(--mono);
-    font-size: 7pt;
-    color: var(--muted);
-  }
-  .dot { width: 2mm; height: 2mm; border-radius: 50%; }
+${TITLEBAR_CSS}
 
   /* Exact height, not min-height: at exactly 297mm the sub-pixel rounding of
      the title bar tipped the body 2px past the sheet and Chromium emitted a
@@ -496,12 +410,7 @@ export function renderCv(cv: CvData, lang: Lang): string {
 </style>
 </head>
 <body>
-  <div class="titlebar">
-    <span class="dot" style="background:#e05c53"></span>
-    <span class="dot" style="background:#d9a441"></span>
-    <span class="dot" style="background:#3fa34d"></span>
-    <span style="margin-left:2mm">${esc(cv.name.toLowerCase().split(' ')[0] ?? '')}@goatly.dev: ~/${lang === 'de' ? 'lebenslauf' : 'cv'}</span>
-  </div>
+  ${titlebar(cv.name, lang === 'de' ? 'lebenslauf' : 'cv')}
 
   <div class="page">
     <aside class="sidebar">

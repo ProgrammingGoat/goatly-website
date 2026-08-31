@@ -410,6 +410,75 @@ anything type-shaped. It covers `nuxt.config.ts` and `server/` too, which is not
 incidental: anything in `app.head` must be JSON-serializable, and typecheck is
 what catches a function there being silently dropped at build.
 
+## The Anschreiben — `scripts/build-letter.ts`
+
+A German cover letter on A4, laid out to **DIN 5008 Form B**, from a Markdown
+file with YAML frontmatter.
+
+```bash
+cp templates/letter.md ../applications/2026-09-acme.md
+npm run letter -- ../applications/2026-09-acme.md
+npm run letter -- ../applications/2026-09-acme.md --out ~/Desktop
+```
+
+**Letters do not live in this repo, and the script refuses to write one into
+it.** They name companies and say why you want to leave somewhere, so they
+belong in a *private* repo — which also gives them the history and the backup a
+gitignored file would not have. The path is an argument with no default, so
+this repo holds no assumption about where they are kept and no letter is ever
+in its working tree; there is no `git add -A` that could reach one.
+
+The output guard is not belt-and-braces. A letter PDF carries the postal
+address, the phone and the personal email, and `privacy:check` **cannot see
+inside a PDF** — the text is Flate-compressed, so a substring search over the
+bytes finds nothing. A letter written into this repo would be invisible to the
+one guard meant to catch exactly that, which is why the script hard-fails
+instead of trusting `.gitignore`.
+
+Paths resolve **from the repo root, not your shell** — `npm run` sets the
+working directory to the package root before the script starts. The
+missing-file error prints the resolved absolute path, because the gap between
+what you typed and where it looked is the whole confusion.
+
+### Why the standard wins over the theme
+
+DIN 5008 fixes the geometry: the address field is 85×40mm at 45mm from the top,
+the Betreff sits at 98.46mm, the date is right-aligned, and the fold marks go
+at 105mm and 210mm with the hole mark at 148.5mm. A German recruiter reads a
+deviation from that as carelessness, not as design.
+
+So the theme gets the Briefkopf — the letterhead, the palette, the title bar,
+the type — and the standard gets everything below it. **Where they disagree the
+standard wins.** Form B rather than Form A because there is a letterhead to put
+in the 45mm.
+
+Two conventions worth not rediscovering: there is no `Betreff:` prefix on the
+subject line, that is obsolete; and three empty lines are left above the typed
+name, because a printed name directly under the closing reads as an email
+rather than a letter.
+
+### Shared chrome — `scripts/letterhead.ts`
+
+The CV and the letter arrive in the same folder, so they must read as one
+person's paperwork. The palette, `@page` box, type stack, title bar, contact
+icons and date formatting live in `letterhead.ts` and are used by both.
+
+`cv-template.ts` keeps its own furniture — the gutter, the meters, the timeline
+rail. A letter has no dated entries to align, and importing the gutter would be
+theming for its own sake.
+
+**This is deliberately not a package.** The two documents have to look
+identical, and a version boundary between them is exactly how that stops being
+true — the same argument that removed `--lang` from the CV build. The browser
+plumbing is shared the same way, in `scripts/pdf.ts`, so there is one
+launch-and-print path rather than two that drift.
+
+Dates go through `letterhead.ts`, so the hardcoded-month rule under *Dates*
+applies: `letterDate` reads the ISO string directly and never touches
+`new Date`. German prints `15. September 2026` rather than `15.09.2026` — the
+standard permits both, but a spelled month cannot be misread in US order, and
+an application is where that ambiguity costs most.
+
 ## Tests
 
 Vitest, in `/test`, over **pure functions only** — no Nuxt environment, so the
@@ -420,6 +489,21 @@ A test earns its place in proportion to how *invisible* the failure would be:
 - **`server/utils/feed.ts`** — nobody eyeballs the RSS feed. One unescaped `&`
   makes it unparseable and every subscriber silently stops updating.
 - **`app/utils/format.ts`** — see the timezone note under *Dates*.
+- **`scripts/letter-data.ts` and `letterDate`** — an Anschreiben is printed
+  once and posted. A wrong month, a *Frau* where the recipient is a *Herr*, or
+  a clause silently swallowed by an unescaped `<` all survive a proofread, and
+  none of them can be fixed after the PDF is sent.
+
+  The timezone case there is tested by **flipping `TZ` inside the test**, not
+  by relying on the pinned one. An ISO date-only string parsed through
+  `new Date` is UTC midnight, which is still the right day anywhere east of
+  UTC — so `Europe/Berlin` alone cannot catch that regression. Los Angeles
+  can, and turns `1. Januar 2026` into `31. Januar 2026`: wrong, and plausible
+  enough to post. This is the one place the suite deliberately steps outside
+  the pinned timezone.
+
+  The letter's *layout* is not tested. It is loud and visual — you see it in
+  the PDF — and `build-letter.ts` warns when a letter runs to two pages.
 
 Things whose breakage is loud and visual — layout, placeholder gradients,
 component rendering — are deliberately **not** tested. You'd see those on first

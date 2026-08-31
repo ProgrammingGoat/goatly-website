@@ -13,6 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "cv": "node scripts/build-cv.ts",
+    "letter": "node scripts/build-letter.ts",
     "privacy:check": "node scripts/privacy-check.ts",
     "postinstall": "nuxt prepare"
   },

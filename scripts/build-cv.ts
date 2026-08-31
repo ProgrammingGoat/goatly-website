@@ -27,12 +27,12 @@
  * and a 150MB download per machine is not worth it.
  */
 
-import { existsSync, mkdirSync, readFileSync } from 'node:fs'
-import { dirname, resolve } from 'node:path'
-import { chromium } from 'playwright-core'
+import { existsSync, readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { parse } from 'yaml'
 import { legal } from '../app/legal.ts'
 import { renderCv, type CvData, type Lang } from './cv-template.ts'
+import { launch, printPdf } from './pdf.ts'
 
 /** Both are always built together — see the note at the top of the file. */
 const LANGS: Lang[] = ['en', 'de']
@@ -51,26 +51,6 @@ function filename(name: string, lang: Lang, isPrivate: boolean): string {
   const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
   const kind = lang === 'de' ? 'lebenslauf' : 'cv'
   return `${slug}-${kind}${isPrivate ? '-full' : ''}.pdf`
-}
-
-/** A system Chromium. Playwright's own download is not required or expected. */
-function findBrowser(): string {
-  const candidates = [
-    process.env.CHROME_PATH,
-    '/usr/bin/chromium',
-    '/usr/bin/chromium-browser',
-    '/usr/bin/google-chrome',
-    '/usr/bin/google-chrome-stable',
-    '/snap/bin/chromium',
-    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-  ].filter(Boolean) as string[]
-
-  for (const path of candidates) if (existsSync(path)) return path
-
-  throw new Error(
-    'No Chromium found. Install one, or set CHROME_PATH to a browser binary.\n'
-    + `  Looked in: ${candidates.join(', ')}`,
-  )
 }
 
 /** Every string in an object, with the key path that led to it. */
@@ -148,7 +128,7 @@ async function main() {
     = (args.includes('--all') ? [false, true] : [args.includes('--private')])
       .flatMap(isPrivate => LANGS.map(lang => ({ lang, isPrivate })))
 
-  const browser = await chromium.launch({ executablePath: findBrowser() })
+  const browser = await launch()
   try {
     for (const { lang, isPrivate } of jobs) {
       const data = loadData(isPrivate)
@@ -156,26 +136,9 @@ async function main() {
 
       if (!isPrivate) assertNoPrivateData(html, lang)
 
-      const page = await browser.newPage()
-      await page.setContent(html, { waitUntil: 'networkidle' })
-      // Webfonts arrive after networkidle on a slow link; without this the
-      // page can be printed mid-swap, in the fallback face.
-      await page.evaluate(() => document.fonts.ready)
-
       const dir = isPrivate ? OUT.private : OUT.public
       const out = resolve(dir, filename(data.name, lang, isPrivate))
-      mkdirSync(dirname(out), { recursive: true })
-
-      await page.pdf({
-        path: out,
-        format: 'A4',
-        printBackground: true,
-        preferCSSPageSize: true,
-        margin: { top: '0', right: '0', bottom: '0', left: '0' },
-      })
-      await page.close()
-
-      const pages = countPages(out)
+      const { pages } = await printPdf(browser, html, out)
       const size = (readFileSync(out).length / 1024).toFixed(0)
       console.log(
         `${isPrivate ? 'private' : 'public '}  ${lang}  ${out}  (${pages} page${pages === 1 ? '' : 's'}, ${size}KB)`,
@@ -190,12 +153,6 @@ async function main() {
   finally {
     await browser.close()
   }
-}
-
-/** Page count, read straight off the PDF — no dependency, just the /Type /Page objects. */
-function countPages(path: string): number {
-  const bytes = readFileSync(path).toString('latin1')
-  return (bytes.match(/\/Type\s*\/Page[^s]/g) ?? []).length || 1
 }
 
 await main()
