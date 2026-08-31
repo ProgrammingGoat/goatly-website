@@ -5,8 +5,10 @@ code projects, and a CV that renders both to the web and to an A4 PDF in
 English or German from one data file.
 
 Nuxt 4 (static), Nuxt Content v3, Tailwind CSS v4, deployed to Cloudflare
-Pages. Needs **Node 22+** — Nuxt Content is set to use the built-in
-`node:sqlite` rather than the native `better-sqlite3` addon.
+Pages. Needs **Node 22.5+ and npm 11.17+** — `node:sqlite` needs the first,
+and the lockfile needs the second, since an older npm cannot read it and
+`npm ci` fails. Both are declared in `engines`; `.nvmrc` pins the version
+Cloudflare builds with.
 
 ## Getting started
 

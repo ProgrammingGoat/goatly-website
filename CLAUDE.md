@@ -15,8 +15,20 @@ motif (the domain and the `@ProgrammingGoat` handle are the source of it).
 - Deploys to **Cloudflare Pages**, Git-connected, so every push to `main`
   deploys. Build command `npm run generate`; output dir **`dist`** in the
   dashboard but `.output/public` locally — Cloudflare sets `CF_PAGES=1`, Nitro
-  switches to its cloudflare-pages preset, and that writes `dist`. Node is
-  pinned there with a `NODE_VERSION` project variable, not a file in the repo.
+  switches to its cloudflare-pages preset, and that writes `dist`.
+
+  **Node is pinned by `.nvmrc`, in the repo.** It used to be a `NODE_VERSION`
+  project variable in the dashboard, and that broke the first deploy: the
+  variable was older than the local Node, so Cloudflare ran an older npm, and
+  an older npm cannot read a lockfile npm 11.17 wrote — `npm ci` failed with
+  `Missing: cac@6.7.14 from lock file`. Reproduced exactly by running
+  `npx npm@10 ci --dry-run` locally.
+
+  Regenerating the lockfile with the older npm is the obvious fix and is a
+  trap: it satisfies every npm version, and then the next local `npm install`
+  rewrites it back, so the deploy breaks again weeks later with no related
+  change to point at. The toolchain gets pinned instead, in a file that
+  travels with the code and cannot drift from the lockfile beside it.
 
 The site is in **English**. The legal pages (`/impressum`, `/datenschutz`) are in
 **German** — they address German law and that is the convention there. CV *data*
