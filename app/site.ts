@@ -47,7 +47,7 @@ export const site = {
   ],
 
   description:
-    'Full-stack developer in Heidelberg — Java, Spring, Vue and TypeScript, using modern tools for automation and AI-assisted development.',
+    'Full-stack developer in Heidelberg — Vue, TypeScript, Python and Java, using modern tools for automation and AI-assisted development.',
 
   home: {
     lead: 'I build and test web applications, mostly in Java and TypeScript.',

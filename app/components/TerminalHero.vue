@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { site } from '~/site'
 
-const stack = ['Vue', 'Angular', 'TypeScript', 'Java', 'Spring']
+const stack = ['Vue', 'Angular', 'TypeScript', 'Python', 'Java']
 
 const nameEl = ref<HTMLElement | null>(null)
 
