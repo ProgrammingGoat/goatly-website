@@ -49,9 +49,6 @@ export default defineNuxtConfig({
       markdown: {
         toc: { depth: 3 },
       },
-      // Measures each cover into coverWidth/coverHeight — see the file for why
-      // the social card needs pixels where the site's crops need none.
-      transformers: ['~~/transformers/cover-size'],
     },
   },
 

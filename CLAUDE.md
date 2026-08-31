@@ -288,7 +288,8 @@ Landscape suits the card's 16/9 slot. At least 1200px wide — the social card
 crops 1200×630 out of it, and cards request up to 640px at 2x — with 1600–2000
 a sensible target; beyond that only costs build time, since every variant is
 encoded to AVIF and WebP. `focus:` moves the part of an off-ratio cover that
-survives the crop. Without a cover the card shows a gradient carrying the
+survives the crop on the site's own cards; the social card always crops from
+the centre. Without a cover the card shows a gradient carrying the
 entry's path.
 
 ### Bilingual CV fields

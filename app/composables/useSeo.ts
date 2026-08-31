@@ -32,15 +32,11 @@ const CARD_TYPE = 'image/jpeg'
 
 /**
  * What a card is built from — an entry, or anything shaped like one. The whole
- * entry rather than a cover path, because placing the crop needs its `focus`
- * and the size cover-size.ts measured, and the alt text is its own title.
+ * entry rather than a cover path, because the alt text is its own title.
  */
 type CardSource = {
   title?: string
   cover?: string
-  focus?: string
-  coverWidth?: number
-  coverHeight?: number
 }
 
 export function useSeo(input: {
@@ -63,21 +59,14 @@ export function useSeo(input: {
     const entry = source()
     if (!entry) return undefined
 
-    const crop = coverCrop(
-      entry.focus,
-      { width: entry.coverWidth ?? 0, height: entry.coverHeight ?? 0 },
-      CARD,
-    )
     // Asking $img for the URL is also what gets the crop *built*: during
     // prerender it registers the path with Nitro, so the file lands in the
     // static output instead of 404ing at a URL only a scraper ever visits.
     const url = img(entry.cover!, {
-      // Extract first — IPX applies equal-order modifiers in the order the URL
-      // lists them, and the provider appends the resize after whatever it's
-      // given, so the box is cut from the source rather than from the scaling.
-      ...(crop
-        ? { extract: `${crop.left}_${crop.top}_${crop.width}_${crop.height}` }
-        : { fit: 'cover' }), // unmeasured: fall back to a centred crop
+      // Centred. Covers here are landscape screenshots and the card's shape is
+      // close enough to theirs that aiming the crop bought nothing for the
+      // build-time measuring pass it cost.
+      fit: 'cover',
       ...CARD,
       // JPEG because scrapers won't take WebP, and its own quality above the
       // site's 72: this is the one JPEG anybody actually looks at.

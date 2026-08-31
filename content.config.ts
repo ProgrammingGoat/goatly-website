@@ -35,10 +35,6 @@ export default defineContentConfig({
         // open; coverPosition in app/utils/cover.ts validates it and falls back
         // to centre rather than emitting CSS the browser drops.
         focus: z.string().optional(),
-        // Measured from the file by transformers/cover-size.ts so the social
-        // card can crop in pixels. Derived, never authored.
-        coverWidth: z.number().optional(),
-        coverHeight: z.number().optional(),
         featured: z.boolean().default(false), // promote to the landing page
         draft: z.boolean().default(false),
         tags: z.array(z.string()).default([]),
