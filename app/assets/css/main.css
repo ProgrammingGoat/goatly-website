@@ -194,7 +194,14 @@ body,
   line-height: 1.75;
   font-size: 1.05rem;
 }
-.prose > * + * {
+/* Vertical rhythm for the body.
+   Both shapes on purpose: Nuxt Content renders a markdown body inside one
+   unclassed <div>, so `.prose > * + *` alone matches nothing and every
+   paragraph after the first sits flush against the one above it. The direct
+   form is kept so the rule still works wherever .prose wraps hand-written
+   markup (the CV page, the legal pages) rather than a rendered document. */
+.prose > * + *,
+.prose > div > * + * {
   margin-top: 1.25em;
 }
 .prose-compact {
@@ -287,7 +294,10 @@ body,
   border: 0;
   padding: 0;
 }
+/* A rule is a section break, so it gets more air than a paragraph gap — and
+   symmetric air, since the margin below collapses with the next element's. */
 .prose hr {
   border: 0;
   border-top: 1px solid var(--border);
+  margin: 2.5em 0;
 }
