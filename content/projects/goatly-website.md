@@ -16,7 +16,7 @@ tags:
   - typescript
 links:
   - label: Source
-    url: https://github.com/ProgrammingGoat
+    url: https://github.com/ProgrammingGoat/goatly-website
 ---
 
 A static site built with Nuxt 4 and Nuxt Content, deployed to Cloudflare Pages.
@@ -31,6 +31,11 @@ The PDF follows the terminal theme of the website, while using a lighter theme f
 easier printing.
 In addition, private fields like my address and phone number are stored in a
 separate gitignored file, and can be rendered into a complete PDF using a local script.
+
+Furthermore, the repo comes with a cover letter generator. Address, subject and body
+for the letter are entered in a markdown file with frontmatter. These are laid out
+to DIN 5008 formatting and generated into a PDF matching the branding using
+the same pipeline as the CV generator.
 
 This project was built using Claude Code. Every change was reviewed, tested and
 adjusted by me.
