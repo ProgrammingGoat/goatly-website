@@ -33,8 +33,10 @@ experience:
       de: Junior Developer
     org: tts Knowledge Products GmbH
     bullets:
-      - en: Built and shipped new features and bug fixes, largely independently, using Claude Code.
-        de: Entwicklung und Umsetzung neuer Features, Bugfixing, größtenteils eigenständig mithilfe von Claude Code.
+      - en: Built and shipped new features and bug fixes using Scrum principles.
+        de: Entwicklung und Umsetzung neuer Features, Bugfixing nach Scrum-Prinzipien.
+      - en: AI-assisted development; writing and reviewing code with Claude Code.
+        de: KI-gestützte Entwicklung; Schreiben und Reviewen von Code mit Claude Code.
       - en: Dependency updates and closing security vulnerabilities; contributed to internal tooling, including a local Docker setup.
         de: Dependency-Updates und Schließen von Sicherheitslücken; Mitarbeit an internem Tooling (u. a. lokales Docker-Setup).
     stack: [Java, Spring, Tomcat, Docker, TypeScript, Vue]
@@ -209,7 +211,7 @@ interests:
     de: 3D-Drucken
   - en: Drawing
     de: Zeichnen
-  - en: Arch Linux
-    de: Arch Linux
+  - en: Linux
+    de: Linux
   - en: Python scripting
     de: Python Scripting
